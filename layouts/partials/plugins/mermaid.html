@@ -1,0 +1,104 @@
+{{/*
+  Mermaid 流程图支持
+  参考: hexo-theme-fluid layout/_partials/plugins/mermaid.ejs
+  Requirements: 25.1, 25.2
+*/}}
+
+{{ $mermaidEnable := .Site.Params.post.mermaid.enable | default false }}
+{{ $mermaidSpecific := .Site.Params.post.mermaid.specific | default false }}
+{{ $pageMermaid := .Params.mermaid | default false }}
+
+{{ if and $mermaidEnable (or (not $mermaidSpecific) $pageMermaid) }}
+  {{ $mermaidCDN := .Site.Params.static_prefix.mermaid | default "https://cdn.jsdelivr.net/npm/mermaid@10/dist/" }}
+  
+  <script src="{{ $mermaidCDN }}mermaid.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 获取主题
+      function getTheme() {
+        var scheme = document.documentElement.getAttribute('data-user-color-scheme');
+        return scheme === 'dark' ? 'dark' : 'default';
+      }
+      
+      // Mermaid 图表的起始关键字
+      var mermaidKeywords = [
+        'graph ', 'graph\n',
+        'flowchart ', 'flowchart\n',
+        'sequenceDiagram', 
+        'classDiagram',
+        'stateDiagram',
+        'erDiagram',
+        'gantt',
+        'pie ',
+        'gitGraph',
+        'journey',
+        'mindmap',
+        'timeline',
+        'quadrantChart',
+        'requirementDiagram',
+        'C4Context'
+      ];
+      
+      // 检查是否是 mermaid 代码
+      function isMermaidCode(text) {
+        var trimmed = text.trim();
+        for (var i = 0; i < mermaidKeywords.length; i++) {
+          if (trimmed.startsWith(mermaidKeywords[i])) {
+            return true;
+          }
+        }
+        return false;
+      }
+      
+      // 查找所有 fallback 代码块（Hugo 不认识 mermaid 语言时会用 fallback）
+      var codeBlocks = document.querySelectorAll('pre code.language-fallback, pre code.language-mermaid');
+      var mermaidBlocks = [];
+      
+      codeBlocks.forEach(function(code) {
+        if (isMermaidCode(code.textContent)) {
+          mermaidBlocks.push(code);
+        }
+      });
+      
+      if (mermaidBlocks.length === 0) return;
+      
+      // 转换代码块为 mermaid div
+      mermaidBlocks.forEach(function(code, i) {
+        var pre = code.parentElement;
+        var wrapper = pre.parentElement; // code-wrapper div
+        var content = code.textContent;
+        
+        // 创建 mermaid 容器
+        var div = document.createElement('div');
+        div.className = 'mermaid';
+        div.id = 'mermaid-' + i;
+        div.textContent = content;
+        
+        // 替换整个 wrapper 或 pre
+        if (wrapper && wrapper.classList.contains('code-wrapper')) {
+          wrapper.parentNode.replaceChild(div, wrapper);
+        } else {
+          pre.parentNode.replaceChild(div, pre);
+        }
+      });
+      
+      // 初始化 mermaid
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: getTheme(),
+        securityLevel: 'loose'
+      });
+    });
+  </script>
+  <style>
+    .mermaid {
+      text-align: center;
+      margin: 1.5em 0;
+      background: transparent !important;
+    }
+    .mermaid svg {
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
+{{ end }}

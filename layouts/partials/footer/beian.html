@@ -1,0 +1,47 @@
+{{/* Chinese ICP Beian - 参考: hexo-theme-fluid/layout/_partials/footer/beian.ejs */}}
+{{/* 国内大陆服务器的备案信息 - 通常只在中文站点显示 */}}
+
+{{/* 只在中文语言环境下显示备案信息 */}}
+{{ if or (eq .Site.Language.Lang "zh") (eq .Site.Language.Lang "zh-CN") (eq .Site.Language.Lang "zh-TW") (eq .Site.Language.Lang "zh-HK") }}
+<div class="beian">
+  {{/* ICP 备案 */}}
+  {{ with .Site.Params.footer.beian.icp_text }}
+  <span>
+    <a href="https://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+      {{ . | safeHTML }}
+    </a>
+  </span>
+  {{ end }}
+
+  {{/* 公安备案 */}}
+  {{ with .Site.Params.footer.beian.police_text }}
+    {{ $policeCode := $.Site.Params.footer.beian.police_code }}
+    {{ $policeIcon := $.Site.Params.footer.beian.police_icon }}
+    
+    {{ if $policeCode }}
+    {{/* 有公安备案编号，显示链接 */}}
+    <span>
+      <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode={{ $policeCode }}"
+         rel="nofollow noopener"
+         class="beian-police"
+         target="_blank">
+        {{ if $policeIcon }}
+        <span style="visibility: hidden; width: 0">|</span>
+        <img src="{{ $policeIcon | relURL }}" alt="police-icon" width="16" height="16" loading="lazy" />
+        {{ end }}
+        <span>{{ . | safeHTML }}</span>
+      </a>
+    </span>
+    {{ else }}
+    {{/* 无公安备案编号，仅显示文本 */}}
+    <span class="beian-police">
+      {{ if $policeIcon }}
+      <span style="visibility: hidden; width: 0">|</span>
+      <img src="{{ $policeIcon | relURL }}" alt="police-icon" width="16" height="16" loading="lazy" />
+      {{ end }}
+      <span>{{ . | safeHTML }}</span>
+    </span>
+    {{ end }}
+  {{ end }}
+</div>
+{{ end }}

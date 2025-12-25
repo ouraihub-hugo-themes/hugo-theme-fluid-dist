@@ -1,0 +1,65 @@
+{{ define "main" }}
+  {{/* Banner - 对标 hexo: layout/tag.ejs */}}
+  {{ $banner_img := .Site.Params.tag.banner_img | default "/img/default.png" }}
+  {{ $banner_height := .Site.Params.tag.banner_img_height | default 80 }}
+  {{ $banner_mask := .Site.Params.tag.banner_mask_alpha | default 0.3 }}
+
+  {{/* Title format: "标签 - tagname" */}}
+  {{ $title := printf "%s - %s" (i18n "tag.title" | default "Tags") .Title }}
+  {{ $subtitle := printf "%s - %s" (i18n "tag.subtitle" | default "Tags") .Title }}
+
+  {{ partial "header/banner.html" (dict
+    "context" .
+    "banner_img" $banner_img
+    "banner_img_height" $banner_height
+    "banner_mask_alpha" $banner_mask
+    "title" $title
+    "subtitle" $subtitle
+    "show_scroll_down" false
+  ) }}
+
+  {{/* Main Content - 对标 hexo: layout/_partials/archive-list.ejs */}}
+  <main>
+    <div id="board-ctn">
+      <div id="board" class="container">
+        <div class="row mx-auto">
+          <div class="col-12 col-md-10 mx-auto">
+            {{/* Post List */}}
+            <div class="list-group">
+              {{/* Post count */}}
+              <p class="h4">{{ i18n "tag.post_total" (len .Pages) | default (printf "Total %d posts" (len .Pages)) }}</p>
+              <hr style="border-top: 1px solid var(--line-color); margin: 1rem 0;">
+              
+              {{/* Group posts by year - 使用 .Paginator 而不是 .Paginate */}}
+              {{ $paginator := .Paginator }}
+              {{ $dateCursor := "" }}
+              {{ range $paginator.Pages }}
+                {{ $year := .Date.Format "2006" }}
+                {{ if ne $year $dateCursor }}
+                  {{ $dateCursor = $year }}
+                  <p class="h5">{{ $year }}</p>
+                {{ end }}
+                <a href="{{ .RelPermalink }}" class="list-group-item list-group-item-action">
+                  <time>{{ .Date.Format "01-02" }}</time>
+                  <div class="list-group-item-title">{{ .Title }}</div>
+                </a>
+              {{ end }}
+            </div>
+
+            {{/* Empty State */}}
+            {{ if eq (len $paginator.Pages) 0 }}
+              <div class="text-center py-12 text-muted">
+                {{ i18n "list.empty" | default "No posts found." }}
+              </div>
+            {{ end }}
+
+            {{/* Pagination - 对标 hexo: layout/_partials/paginator.ejs */}}
+            {{ if gt $paginator.TotalPages 1 }}
+              {{ partial "paginator.html" $paginator }}
+            {{ end }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+{{ end }}

@@ -1,0 +1,110 @@
+{{/*
+  Waline Comments
+  从 Valine 衍生而来，额外增加了服务端和多种功能
+  
+  参考: hexo-theme-fluid/layout/_partials/comments/waline.ejs
+  文档: https://waline.js.org/
+  
+  配置示例 (params.toml):
+  [waline]
+  serverURL = "https://your-waline-server.vercel.app"
+  path = ""  # 留空则使用当前页面路径
+  meta = ["nick", "mail", "link"]
+  requiredMeta = ["nick"]
+  lang = "zh-CN"
+  emoji = ["https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo"]
+  dark = 'html[data-user-color-scheme="dark"]'
+  wordLimit = 0
+  pageSize = 10
+  login = "enable"
+  copyright = true
+  reaction = false
+*/}}
+
+{{ with .Site.Params.waline }}
+  {{/* 检查必要配置 */}}
+  {{ if .serverURL }}
+    {{/* Waline CSS */}}
+    {{ $walineCDN := $.Site.Params.static_prefix.waline | default "https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/" }}
+    <link rel="stylesheet" href="{{ $walineCDN }}waline.css" />
+    
+    {{/* Waline 容器 */}}
+    <div id="waline"></div>
+    
+    {{/* Waline 加载脚本 */}}
+    <script type="module">
+      (async function() {
+        // 动态导入 Waline
+        const { init } = await import('{{ $walineCDN }}waline.mjs');
+        
+        // 获取路径配置
+        {{ $path := .path | default "" }}
+        var path = '{{ $path }}';
+        if (!path) {
+          path = '{{ $.RelPermalink }}';
+        }
+        
+        // Waline 配置
+        var options = {
+          el: '#waline',
+          serverURL: '{{ .serverURL }}',
+          path: path,
+          {{ with .meta }}
+          meta: {{ . | jsonify }},
+          {{ end }}
+          {{ with .requiredMeta }}
+          requiredMeta: {{ . | jsonify }},
+          {{ end }}
+          lang: '{{ .lang | default "zh-CN" }}',
+          {{ with .emoji }}
+          emoji: {{ . | jsonify }},
+          {{ end }}
+          // 暗色模式选择器
+          dark: '{{ .dark | default `html[data-user-color-scheme="dark"]` }}',
+          {{ with .wordLimit }}
+          wordLimit: {{ . }},
+          {{ end }}
+          pageSize: {{ .pageSize | default 10 }},
+          {{ with .login }}
+          login: '{{ . }}',
+          {{ end }}
+          {{ with .copyright }}
+          copyright: {{ . }},
+          {{ end }}
+          {{ with .reaction }}
+          reaction: {{ . }},
+          {{ end }}
+          {{ with .locale }}
+          locale: {{ . | jsonify }},
+          {{ end }}
+          {{ with .imageUploader }}
+          imageUploader: {{ . }},
+          {{ end }}
+          {{ with .highlighter }}
+          highlighter: {{ . }},
+          {{ end }}
+          {{ with .texRenderer }}
+          texRenderer: {{ . }},
+          {{ end }}
+          {{ with .search }}
+          search: {{ . }},
+          {{ end }}
+          {{ with .recaptchaV3Key }}
+          recaptchaV3Key: '{{ . }}',
+          {{ end }}
+          {{ with .turnstileKey }}
+          turnstileKey: '{{ . }}',
+          {{ end }}
+        };
+        
+        // 初始化 Waline
+        var walineInstance = init(options);
+        
+        // 保存实例到全局变量，方便后续操作
+        window.walineInstance = walineInstance;
+      })();
+    </script>
+    
+    <noscript>Please enable JavaScript to view the comments powered by Waline.</noscript>
+  {{ end }}
+{{ end }}

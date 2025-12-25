@@ -1,0 +1,174 @@
+{{/*
+  图片放大功能 - Fancybox
+  参考: hexo-theme-fluid/layout/_partials/plugins/fancybox.ejs
+  
+  功能:
+  - 为文章中的图片添加点击放大功能
+  - 支持图片 URL 替换（用于将压缩图替换为原图）
+  - 支持图片标题/alt 显示
+  - 支持图片分组浏览
+*/}}
+
+{{ if and (.Site.Params.post.image_zoom.enable | default true) (ne .Params.image_zoom false) }}
+  {{/* Fancybox CSS */}}
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"
+  />
+
+  {{/* jQuery (Fancybox 依赖) */}}
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+
+  {{/* Fancybox JS */}}
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+  {{/* Fancybox 初始化脚本 */}}
+  {{- $imgUrlReplace := .Site.Params.post.image_zoom.img_url_replace | default (slice "" "") -}}
+  <script>
+    (function () {
+      'use strict';
+
+      // 配置
+      var CONFIG = {
+        image_zoom: {
+          enable: true,
+          img_url_replace: JSON.parse('{{ $imgUrlReplace | jsonify }}')
+        }
+      };
+
+      function initFancyBox(selector) {
+        if (!CONFIG.image_zoom.enable || !('fancybox' in jQuery)) {
+          return;
+        }
+
+        // 选择器：文章内容中不在链接内的图片
+        var defaultSelector = '.post-content :not(a) > img, .post-content > img, .markdown-body :not(a) > img, .markdown-body > img';
+        
+        jQuery(selector || defaultSelector).each(function () {
+          var $image = jQuery(this);
+          
+          // 跳过已经处理过的图片
+          if ($image.parent('a.fancybox').length > 0) {
+            return;
+          }
+          
+          // 跳过特定类型的图片（如表情、图标等）
+          if ($image.hasClass('no-zoom') || $image.hasClass('emoji') || $image.hasClass('icon')) {
+            return;
+          }
+
+          // 获取图片 URL（优先使用 data-src，支持懒加载）
+          var imageUrl = $image.attr('data-src') || $image.attr('src') || '';
+          
+          // 图片 URL 替换功能（用于将压缩图替换为原图）
+          if (CONFIG.image_zoom.img_url_replace) {
+            var rep = CONFIG.image_zoom.img_url_replace;
+            var r1 = rep[0] || '';
+            var r2 = rep[1] || '';
+            if (r1) {
+              if (/^re:/.test(r1)) {
+                // 正则替换
+                r1 = r1.replace(/^re:/, '');
+                var reg = new RegExp(r1, 'gi');
+                imageUrl = imageUrl.replace(reg, r2);
+              } else {
+                // 普通字符串替换
+                imageUrl = imageUrl.replace(r1, r2);
+              }
+            }
+          }
+
+          // 创建 fancybox 链接包装
+          var $imageWrap = $image
+            .wrap(
+              '<a class="fancybox fancybox-image" href="' +
+                imageUrl +
+                '" itemscope itemtype="http://schema.org/ImageObject" itemprop="url"></a>'
+            )
+            .parent('a');
+
+          if ($imageWrap.length !== 0) {
+            // 设置分组属性
+            if ($image.is('.group-image-container img')) {
+              $imageWrap.attr('data-fancybox', 'group').attr('rel', 'group');
+            } else {
+              $imageWrap.attr('data-fancybox', 'gallery').attr('rel', 'gallery');
+            }
+
+            // 设置图片标题
+            var imageTitle = $image.attr('title') || $image.attr('alt');
+            if (imageTitle) {
+              $imageWrap.attr('title', imageTitle).attr('data-caption', imageTitle);
+            }
+          }
+        });
+
+        // 配置 Fancybox 默认选项
+        jQuery.fancybox.defaults.hash = false;
+
+        // 初始化 Fancybox
+        jQuery('.fancybox').fancybox({
+          loop: true,
+          buttons: ['zoom', 'slideShow', 'fullScreen', 'download', 'thumbs', 'close'],
+          protect: false,
+          animationEffect: 'zoom',
+          transitionEffect: 'slide',
+          helpers: {
+            overlay: {
+              locked: false
+            }
+          }
+        });
+      }
+
+      // DOM 加载完成后初始化
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function () {
+          initFancyBox();
+        });
+      } else {
+        initFancyBox();
+      }
+
+      // 暴露到全局，以便其他脚本调用（如评论区图片）
+      window.FluidFancyBox = initFancyBox;
+    })();
+  </script>
+
+  {{/* Fancybox 样式调整 */}}
+  <style>
+    /* Fancybox 链接样式 - 确保不使用绝对定位 */
+    a.fancybox,
+    a.fancybox-image {
+      cursor: zoom-in;
+      display: inline-block !important;
+      position: static !important;
+    }
+
+    a.fancybox:hover {
+      text-decoration: none;
+      opacity: 0.9;
+    }
+
+    a.fancybox img {
+      transition: transform 0.2s ease;
+    }
+
+    a.fancybox:hover img {
+      transform: scale(1.02);
+    }
+
+    /* 图片标题样式 */
+    .fancybox-caption {
+      font-size: 14px;
+      color: #fff;
+      text-align: center;
+      padding: 10px 20px;
+    }
+
+    /* 暗色模式适配 */
+    [data-user-color-scheme='dark'] .fancybox-bg {
+      background: rgba(0, 0, 0, 0.95);
+    }
+  </style>
+{{ end }}

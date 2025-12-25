@@ -1,0 +1,54 @@
+{{ define "main" }} {{/* Banner */}} {{ $banner_img := "/img/default.png" }} {{ $banner_height := 60
+}} {{ $banner_mask := 0.3 }} {{ if eq .Data.Plural "categories" }} {{ $banner_img =
+.Site.Params.category.banner_img | default $banner_img }} {{ $banner_height =
+.Site.Params.category.banner_img_height | default $banner_height }} {{ $banner_mask =
+.Site.Params.category.banner_mask_alpha | default $banner_mask }} {{ else if eq .Data.Plural "tags"
+}} {{ $banner_img = .Site.Params.tag.banner_img | default $banner_img }} {{ $banner_height =
+.Site.Params.tag.banner_img_height | default $banner_height }} {{ $banner_mask =
+.Site.Params.tag.banner_mask_alpha | default $banner_mask }} {{ end }} {{ partial
+"header/banner.html" (dict "context" . "banner_img" $banner_img "banner_img_height" $banner_height
+"banner_mask_alpha" $banner_mask "title" .Title "subtitle" "" "show_scroll_down" false ) }} {{/*
+Main Content */}}
+<div class="container mx-auto px-4 py-8 -mt-16 relative z-10">
+  <div class="board p-6 md:p-8">
+    {{ if eq .Data.Plural "tags" }} {{/* Tag Cloud */}}
+    <div class="tag-cloud flex flex-wrap gap-3 justify-center">
+      {{ $minFont := .Site.Params.tag.tagcloud.min_font | default 15 }} {{ $maxFont :=
+      .Site.Params.tag.tagcloud.max_font | default 30 }} {{ $unit := .Site.Params.tag.tagcloud.unit
+      | default "px" }} {{ $maxCount := 1 }} {{ range .Data.Terms }} {{ if gt (len .Pages) $maxCount
+      }} {{ $maxCount = len .Pages }} {{ end }} {{ end }} {{ range .Data.Terms.Alphabetical }} {{
+      $count := len .Pages }} {{ $fontSize := add $minFont (mul (sub $maxFont $minFont) (div (float
+      $count) (float $maxCount))) }}
+      <a
+        href="{{ .Page.RelPermalink }}"
+        class="tag hover:bg-post-link hover:text-white transition-colors"
+        style="font-size: {{ $fontSize }}{{ $unit }};"
+      >
+        {{ .Page.Title }}
+        <span class="text-xs opacity-70">({{ $count }})</span>
+      </a>
+      {{ end }}
+    </div>
+    {{ else }} {{/* Category List */}}
+    <div class="category-list space-y-4">
+      {{ range .Data.Terms.Alphabetical }}
+      <div class="category-item p-4 rounded-lg bg-body-bg hover:shadow-md transition-shadow">
+        <a href="{{ .Page.RelPermalink }}" class="flex items-center justify-between">
+          <span class="font-medium hover:text-post-link transition-colors">
+            {{ .Page.Title }}
+          </span>
+          <span class="text-sm text-muted">
+            {{ len .Pages }} {{ i18n "post.words" | default "posts" }}
+          </span>
+        </a>
+      </div>
+      {{ end }}
+    </div>
+    {{ end }} {{/* Empty State */}} {{ if eq (len .Data.Terms) 0 }}
+    <div class="text-center py-12 text-muted">
+      {{ i18n "list.empty" | default "No items found." }}
+    </div>
+    {{ end }}
+  </div>
+</div>
+{{ end }}

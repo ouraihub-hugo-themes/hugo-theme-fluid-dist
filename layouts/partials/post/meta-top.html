@@ -1,0 +1,74 @@
+{{/* Post Meta Top - 对标 hexo: layout/_partials/post/meta-top.ejs */}}
+{{/* 文章顶部元信息：作者、日期、字数、阅读时间 */}}
+
+{{ if ne .Params.meta false }}
+  {{/* 第一行：作者和日期 */}}
+  <div class="post-metas mt-3">
+    {{/* 作者 */}}
+    {{ if .Site.Params.post.meta.author.enable }}
+      {{ with .Params.author | default .Site.Params.author }}
+        <span class="post-meta mr-2">
+          <i class="iconfont icon-author" aria-hidden="true"></i>
+          {{ . }}
+        </span>
+      {{ end }}
+    {{ end }}
+
+    {{/* 发布日期 */}}
+    {{ if .Site.Params.post.meta.date.enable | default true }}
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="{{ .Date.Format "2006-01-02 15:04" }}" pubdate>
+          {{ .Date.Format (.Site.Params.post.meta.date.format | default "2006-01-02") }}
+        </time>
+      </span>
+    {{ end }}
+  </div>
+
+  {{/* 第二行：字数统计、阅读时间、浏览量 */}}
+  <div class="post-metas mt-1">
+    {{/* 字数统计 */}}
+    {{ if .Site.Params.post.meta.wordcount.enable | default true }}
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart" aria-hidden="true"></i>
+        {{ .WordCount }} {{ i18n "post.words" | default "字" }}
+      </span>
+    {{ end }}
+
+    {{/* 阅读时间 */}}
+    {{ if .Site.Params.post.meta.min2read.enable | default true }}
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill" aria-hidden="true"></i>
+        {{/* 计算阅读时间：使用配置的 wpm 或默认值 */}}
+        {{ $wpm := .Site.Params.post.meta.min2read.wpm | default 200 }}
+        {{ $readingTime := div .WordCount $wpm }}
+        {{ if lt $readingTime 1 }}
+          {{ $readingTime = 1 }}
+        {{ end }}
+        {{ $readingTime }} {{ i18n "post.min_read" | default "分钟" }}
+      </span>
+    {{ end }}
+
+    {{/* 浏览量 - 支持多种统计源 */}}
+    {{ if .Site.Params.post.meta.views.enable }}
+      {{ $source := .Site.Params.post.meta.views.source | default "busuanzi" }}
+      
+      {{ if eq $source "busuanzi" }}
+        <span id="busuanzi_container_page_pv" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> {{ i18n "post.views" | default "次浏览" }}
+        </span>
+      {{ else if eq $source "leancloud" }}
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> {{ i18n "post.views" | default "次浏览" }}
+        </span>
+      {{ else if eq $source "umami" }}
+        <span id="umami-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="umami-page-views"></span> {{ i18n "post.views" | default "次浏览" }}
+        </span>
+      {{ end }}
+    {{ end }}
+  </div>
+{{ end }}

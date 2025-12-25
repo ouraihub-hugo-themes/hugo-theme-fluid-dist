@@ -1,0 +1,57 @@
+{{- /*
+  Image Render Hook with Lazy Loading Support
+  参考: hexo-theme-fluid/scripts/events/lib/lazyload.js
+  
+  Requirements: 18.1, 18.2, 18.3, 18.4
+  
+  This render hook automatically adds lazy loading attributes to images
+  when lazyload is enabled in the site configuration.
+*/ -}}
+
+{{- $src := .Destination -}}
+{{- $alt := .Text -}}
+{{- $title := .Title -}}
+
+{{- /* Get lazyload configuration */ -}}
+{{- $lazyloadEnable := .Page.Site.Params.lazyload.enable | default true -}}
+{{- $loadingImg := .Page.Site.Params.lazyload.loading_img | default "/img/loading.gif" -}}
+{{- $onlyPost := .Page.Site.Params.lazyload.onlypost | default false -}}
+
+{{- /* Check if lazyload should be applied */ -}}
+{{- $shouldLazyload := false -}}
+{{- if $lazyloadEnable -}}
+  {{- if $onlyPost -}}
+    {{- /* Only apply to post pages or pages with lazyload: true in front matter */ -}}
+    {{- if or (eq .Page.Type "post") (.Page.Params.lazyload) -}}
+      {{- $shouldLazyload = true -}}
+    {{- end -}}
+  {{- else -}}
+    {{- /* Apply to all pages unless explicitly disabled */ -}}
+    {{- if ne .Page.Params.lazyload false -}}
+      {{- $shouldLazyload = true -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- if $shouldLazyload -}}
+  {{- /* Lazy loading enabled: use data-src and srcset for placeholder */ -}}
+  <img 
+    src="{{ $src }}" 
+    srcset="{{ $loadingImg | relURL }}" 
+    lazyload
+    alt="{{ $alt }}"
+    {{- with $title }} title="{{ . }}"{{ end }}
+    loading="lazy"
+    decoding="async"
+    class="lazyload-image"
+  >
+{{- else -}}
+  {{- /* Lazy loading disabled: normal image */ -}}
+  <img 
+    src="{{ $src }}" 
+    alt="{{ $alt }}"
+    {{- with $title }} title="{{ . }}"{{ end }}
+    loading="lazy"
+    decoding="async"
+  >
+{{- end -}}

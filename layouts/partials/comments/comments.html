@@ -1,0 +1,81 @@
+{{/*
+  Comments Section
+  评论区容器组件
+  
+  参考: hexo-theme-fluid/layout/_partials/comments.ejs
+  
+  功能:
+  - 根据配置的评论类型加载对应的评论组件
+  - 支持页面级别覆盖评论类型
+  - 支持多种评论系统: giscus, utterances, disqus, gitalk, waline, twikoo 等
+*/}}
+
+{{/* 检查是否应该显示评论 */}}
+{{/* 
+  显示条件:
+  1. 全局评论开启 (.Site.Params.post.comments.enable)
+  2. 页面没有禁用评论 (.Params.comments != false)
+*/}}
+{{ $showComments := and (.Site.Params.post.comments.enable | default false) (ne .Params.comments false) }}
+
+{{ if $showComments }}
+  {{/* 获取评论类型: 页面级别配置优先于全局配置 */}}
+  {{ $commentType := .Site.Params.post.comments.type | default "giscus" }}
+  {{ with .Params.comment }}
+    {{ if and (ne . "") (ne . true) }}
+      {{ $commentType = . }}
+    {{ end }}
+  {{ end }}
+
+  {{ if $commentType }}
+    <article id="comments" class="comments mt-8 pt-8 border-t border-line">
+      {{/* 评论标题 */}}
+      <h3 class="text-xl font-semibold mb-6 flex items-center gap-2 text-post-heading">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+          />
+        </svg>
+        {{ i18n "post.comments" | default "Comments" }}
+      </h3>
+
+      {{/* 评论容器 */}}
+      <div id="comments-container">
+        {{ if eq $commentType "giscus" }}
+          {{ partial "comments/giscus.html" . }}
+        {{ else if eq $commentType "utterances" }}
+          {{ partial "comments/utterances.html" . }}
+        {{ else if eq $commentType "disqus" }}
+          {{ partial "comments/disqus.html" . }}
+        {{ else if eq $commentType "gitalk" }}
+          {{ partial "comments/gitalk.html" . }}
+        {{ else if eq $commentType "waline" }}
+          {{ partial "comments/waline.html" . }}
+        {{ else if eq $commentType "twikoo" }}
+          {{ partial "comments/twikoo.html" . }}
+        {{ else if eq $commentType "valine" }}
+          {{ partial "comments/valine.html" . }}
+        {{ else if eq $commentType "cusdis" }}
+          {{ partial "comments/cusdis.html" . }}
+        {{ else if eq $commentType "remark42" }}
+          {{ partial "comments/remark42.html" . }}
+        {{ else if eq $commentType "livere" }}
+          {{ partial "comments/livere.html" . }}
+        {{ else if eq $commentType "changyan" }}
+          {{ partial "comments/changyan.html" . }}
+        {{ else if eq $commentType "discuss" }}
+          {{ partial "comments/discuss.html" . }}
+        {{ end }}
+      </div>
+    </article>
+  {{ end }}
+{{ end }}

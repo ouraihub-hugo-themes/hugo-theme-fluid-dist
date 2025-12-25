@@ -1,0 +1,94 @@
+{{ define "main" }}
+{{/* DEBUG: 检查配置值 */}}
+<!-- DEBUG: about.banner_img = {{ .Site.Params.about.banner_img }} -->
+<!-- DEBUG: about.enable = {{ .Site.Params.about.enable }} -->
+
+{{/* Banner */}}
+{{ partial "header/banner.html" (dict
+  "context" .
+  "banner_img" (.Site.Params.about.banner_img | default "/img/default.png")
+  "banner_img_height" (.Site.Params.about.banner_img_height | default 60)
+  "banner_mask_alpha" (.Site.Params.about.banner_mask_alpha | default 0.3)
+  "title" (i18n "nav.about" | default "About")
+  "subtitle" ""
+  "show_scroll_down" false
+) }}
+
+{{/* Main Content */}}
+<div id="board" class="container mx-auto px-4">
+  <div class="row">
+    <div class="col-12 col-md-10 mx-auto">
+      {{/* About Avatar - 对标 hexo-theme-fluid about.ejs */}}
+      {{ with .Site.Params.about.avatar }}
+      <div class="about-avatar">
+        <img
+          src="{{ . | relURL }}"
+          alt="{{ $.Site.Params.about.name | default $.Site.Title }}"
+          width="160"
+          height="160"
+          loading="eager"
+          decoding="async"
+        />
+      </div>
+      {{ end }}
+
+      {{/* About Info - 对标 hexo-theme-fluid about.ejs */}}
+      <div class="about-info text-center">
+        {{/* Name */}}
+        {{ with .Site.Params.about.name }}
+        <div class="about-name">{{ . }}</div>
+        {{ end }}
+
+        {{/* Intro */}}
+        {{ with .Site.Params.about.intro }}
+        <div class="about-intro">{{ . }}</div>
+        {{ end }}
+
+        {{/* Social Icons - 对标 hexo-theme-fluid about.ejs */}}
+        {{ with .Site.Params.about.icons }}
+        <div class="about-icons">
+          {{ range . }}
+            {{ if .class }}
+              {{ if .qrcode }}
+              {{/* QR Code Hover - 对标 hexo-theme-fluid qr-trigger */}}
+              <a href="javascript:void(0);" class="qr-trigger" target="_self">
+                <i class="{{ .class }}" aria-hidden="true"></i>
+                <img class="qr-img" src="{{ .qrcode | relURL }}" alt="qrcode" />
+              </a>
+              {{ else }}
+              {{/* Normal Link - 对标 hexo-theme-fluid hint--bottom hint--rounded */}}
+              <a
+                href="{{ .link | relURL }}"
+                class="{{ if .tip }}hint--bottom hint--rounded{{ end }}"
+                {{ with .tip }}aria-label="{{ . }}"{{ end }}
+                target="_blank"
+                rel="nofollow noopener"
+              >
+                <i class="{{ .class }}" aria-hidden="true"></i>
+              </a>
+              {{ end }}
+            {{ end }}
+          {{ end }}
+        </div>
+        {{ end }}
+      </div>
+
+      {{/* About Content - 对标 hexo-theme-fluid about-content */}}
+      {{ if .Content }}
+      <article class="about-content page-content mt-8">
+        <div class="markdown-body">
+          {{ .Content }}
+        </div>
+      </article>
+      {{ end }}
+
+      {{/* Comments - 对标 hexo-theme-fluid comments */}}
+      {{ if .Params.comments | default false }}
+      <article id="comments" class="mt-8">
+        {{ partial "comments/comments.html" . }}
+      </article>
+      {{ end }}
+    </div>
+  </div>
+</div>
+{{ end }}

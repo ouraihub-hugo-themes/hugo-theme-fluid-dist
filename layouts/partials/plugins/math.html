@@ -1,0 +1,120 @@
+{{/*
+  数学公式支持 - MathJax 和 KaTeX
+  参考: hexo-theme-fluid layout/_partials/plugins/math.ejs
+  
+  配置项:
+  - post.math.enable: 是否启用数学公式
+  - post.math.specific: 是否只在 Front-matter 中指定 math: true 时启用
+  - post.math.engine: 渲染引擎 (mathjax | katex)
+  
+  Requirements: 24.1, 24.2, 24.3
+*/}}
+
+{{/* 判断是否启用数学公式 */}}
+{{ $mathEnable := .Site.Params.post.math.enable | default false }}
+{{ $mathSpecific := .Site.Params.post.math.specific | default false }}
+{{ $pageMath := .Params.math | default false }}
+
+{{/* 如果全局启用，且不是 specific 模式，或者页面指定了 math: true */}}
+{{ if and $mathEnable (or (not $mathSpecific) $pageMath) }}
+  {{ $engine := .Site.Params.post.math.engine | default "mathjax" }}
+  
+  {{/* MathJax 3.x */}}
+  {{ if eq $engine "mathjax" }}
+    {{ $mathjaxCDN := .Site.Params.static_prefix.mathjax | default "https://lib.baomitu.com/mathjax/3.2.2/" }}
+    
+    {{/* MathJax 配置 */}}
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']],
+          processEscapes: true,
+          processEnvironments: true,
+          tags: 'ams'
+        },
+        options: {
+          skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'annotation', 'annotation-xml'],
+          ignoreHtmlClass: 'tex2jax_ignore',
+          processHtmlClass: 'tex2jax_process',
+          renderActions: {
+            insertedScript: [200, function() {
+              document.querySelectorAll('mjx-container').forEach(function(node) {
+                var target = node.parentNode;
+                if (target && target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        },
+        svg: {
+          fontCache: 'global'
+        },
+        startup: {
+          ready: function() {
+            MathJax.startup.defaultReady();
+            if (typeof window.Fluid !== 'undefined' && window.Fluid.events) {
+              window.Fluid.events.registerRefreshCallback(function() {
+                if (MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+                  MathJax.startup.document.state(0);
+                  MathJax.texReset();
+                  MathJax.typeset();
+                  MathJax.typesetPromise();
+                }
+              });
+            }
+          }
+        }
+      };
+    </script>
+    
+    {{/* 加载 MathJax */}}
+    <script id="MathJax-script" async src="{{ $mathjaxCDN }}es5/tex-mml-chtml.js"></script>
+    
+    {{/* MathJax 样式修复 */}}
+    <style>
+      .has-jax { list-style: none; }
+      .has-jax::before { content: ''; }
+      mjx-container { overflow-x: auto; overflow-y: hidden; max-width: 100%; }
+      mjx-container[display="true"] { display: block !important; text-align: center; margin: 1em 0; }
+    </style>
+  
+  {{/* KaTeX */}}
+  {{ else if eq $engine "katex" }}
+    {{ $katexCDN := .Site.Params.static_prefix.katex | default "https://lib.baomitu.com/KaTeX/0.16.2/" }}
+    
+    {{/* KaTeX CSS */}}
+    <link rel="stylesheet" href="{{ $katexCDN }}katex.min.css" />
+    
+    {{/* KaTeX JS */}}
+    <script defer src="{{ $katexCDN }}katex.min.js"></script>
+    <script defer src="{{ $katexCDN }}contrib/auto-render.min.js"></script>
+    
+    {{/* KaTeX 初始化 */}}
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'annotation', 'annotation-xml'],
+          ignoredClasses: ['tex2jax_ignore'],
+          throwOnError: false,
+          strict: false,
+          trust: true
+        });
+      });
+    </script>
+    
+    {{/* KaTeX 样式修复 */}}
+    <style>
+      .katex-display { overflow-x: auto; overflow-y: hidden; max-width: 100%; }
+      .katex-display > .katex { display: inline-block; text-align: center; }
+      li > .katex-display { margin: 0.5em 0; }
+    </style>
+  {{ end }}
+{{ end }}

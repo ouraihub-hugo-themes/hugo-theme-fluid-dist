@@ -1,0 +1,15 @@
+{{/* Header - 包含导航栏和 Banner */}}
+{{/* 获取 Banner 高度配置 */}}
+{{ $banner_img_height := 100 }}
+{{ if .IsHome }}
+  {{ $banner_img_height = .Params.banner_img_height | default .Site.Params.index.banner_img_height | default 100 }}
+{{ else if eq .Kind "404" }}
+  {{ $banner_img_height = .Site.Params.page404.banner_img_height | default 85 }}
+{{ else }}
+  {{ $banner_img_height = .Params.banner_img_height | default .Site.Params.index.banner_img_height | default 100 }}
+{{ end }}
+
+<div class="header-inner" style="height: {{ $banner_img_height }}vh;">
+  {{/* Navigation Bar */}} {{ partial "header/navigation.html" . }} {{/* Banner */}} {{ partial
+  "header/banner.html" . }}
+</div>

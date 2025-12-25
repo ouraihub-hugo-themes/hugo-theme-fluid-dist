@@ -1,0 +1,34 @@
+{{/* Post Meta Bottom - Tags and Update Info */}}
+
+{{/* Update Notice */}}
+{{ if .Site.Params.post.updated.enable }}
+  {{ $updated := .Lastmod | default .Date }}
+  {{ if ne $updated.Format "2006-01-02" (.Date.Format "2006-01-02") }}
+    <div class="update-notice mt-8 p-4 rounded-lg bg-body-bg border border-line">
+      <div class="flex items-center gap-2 text-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        {{ i18n "post.updated" | default "Updated on" }}:
+        {{ if .Site.Params.post.updated.relative }}
+          {{ $updated | time.Format "2006-01-02" }}
+        {{ else }}
+          {{ $updated.Format (.Site.Params.post.updated.date_format | default "2006-01-02") }}
+        {{ end }}
+      </div>
+    </div>
+  {{ end }}
+{{ end }}
+
+{{/* Tags */}}
+{{ with .Params.tags }}
+  <div class="post-tags mt-8 pt-6 border-t border-line">
+    <div class="flex flex-wrap gap-2">
+      {{ range . }}
+        <a href="{{ "tags/" | relURL }}{{ . | urlize }}/" class="tag">
+          #{{ . }}
+        </a>
+      {{ end }}
+    </div>
+  </div>
+{{ end }}

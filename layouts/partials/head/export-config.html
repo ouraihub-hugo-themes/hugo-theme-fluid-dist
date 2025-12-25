@@ -1,0 +1,68 @@
+{{/*
+  Export theme config to JavaScript
+  参考: hexo-theme-fluid/scripts/helpers/export-config.js
+*/}}
+<script id="fluid-configs">
+  var Fluid = window.Fluid || {};
+  Fluid.ctx = Object.assign({}, Fluid.ctx);
+  var CONFIG = {
+    hostname: {{ .Site.BaseURL | jsonify }},
+    root: {{ "/" | relURL | jsonify }},
+    version: "1.0.0-dev",
+    typing: {
+      enable: {{ .Site.Params.fun_features.typing.enable | default true }},
+      typeSpeed: {{ .Site.Params.fun_features.typing.typeSpeed | default 70 }},
+      cursorChar: {{ .Site.Params.fun_features.typing.cursorChar | default "_" | jsonify }},
+      loop: {{ .Site.Params.fun_features.typing.loop | default false }}
+    },
+    anchorjs: {
+      enable: {{ .Site.Params.fun_features.anchorjs.enable | default true }},
+      element: {{ .Site.Params.fun_features.anchorjs.element | default "h1,h2,h3,h4,h5,h6" | jsonify }},
+      placement: {{ .Site.Params.fun_features.anchorjs.placement | default "left" | jsonify }},
+      visible: {{ .Site.Params.fun_features.anchorjs.visible | default "hover" | jsonify }},
+      icon: {{ .Site.Params.fun_features.anchorjs.icon | default "" | jsonify }}
+    },
+    progressbar: {
+      enable: {{ .Site.Params.fun_features.progressbar.enable | default true }},
+      height_px: {{ .Site.Params.fun_features.progressbar.height_px | default 3 }},
+      color: {{ .Site.Params.fun_features.progressbar.color | default "#29d" | jsonify }}
+    },
+    code: {
+      copy_btn: {{ .Site.Params.code.copy_btn | default true }},
+      language: {
+        enable: {{ .Site.Params.code.language.enable | default true }},
+        default: {{ .Site.Params.code.language.default | default "TEXT" | jsonify }}
+      },
+      highlight: {
+        enable: {{ .Site.Params.code.highlight.enable | default true }},
+        line_number: {{ .Site.Params.code.highlight.line_number | default true }}
+      }
+    },
+    image_caption: {
+      enable: {{ .Site.Params.post.image_caption.enable | default true }}
+    },
+    image_zoom: {
+      enable: {{ .Site.Params.post.image_zoom.enable | default true }},
+      img_url_replace: {{ .Site.Params.post.image_zoom.img_url_replace | default (slice "" "") | jsonify }}
+    },
+    toc: {
+      enable: {{ .Site.Params.post.toc.enable | default true }},
+      placement: {{ .Site.Params.post.toc.placement | default "right" | jsonify }},
+      headingSelector: {{ .Site.Params.post.toc.headingSelector | default "h1,h2,h3,h4,h5,h6" | jsonify }},
+      collapseDepth: {{ .Site.Params.post.toc.collapseDepth | default 0 }}
+    },
+    lazyload: {
+      enable: {{ .Site.Params.lazyload.enable | default true }},
+      loading_img: {{ .Site.Params.lazyload.loading_img | default "/img/loading.gif" | jsonify }},
+      onlypost: {{ .Site.Params.lazyload.onlypost | default false }},
+      offset_factor: {{ .Site.Params.lazyload.offset_factor | default 2 }}
+    },
+    search_path: {{ "/index.json" | relURL | jsonify }},
+    include_content_in_search: {{ .Site.Params.search.content | default true }}
+  };
+
+  if (CONFIG.web_analytics && CONFIG.web_analytics.follow_dnt) {
+    var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+    Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+  }
+</script>

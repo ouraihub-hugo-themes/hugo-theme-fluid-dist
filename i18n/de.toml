@@ -1,0 +1,282 @@
+# Hugo Theme Fluid - Deutsche Übersetzung
+# Based on hexo-theme-fluid/languages/de.yml
+
+[name]
+other = "Deutsch"
+
+# Navigation
+[nav.home]
+other = "Startseite"
+
+[nav.archive]
+other = "Archiv"
+
+[nav.category]
+other = "Kategorien"
+
+[nav.tag]
+other = "Schlagwörter"
+
+[nav.about]
+other = "Über"
+
+[nav.links]
+other = "Weblinks"
+
+[nav.toggle]
+other = "Navigation umschalten"
+
+# Startseite
+[home.title]
+other = "Startseite"
+
+[home.menu]
+other = "Startseite"
+
+# Archiv
+[archive.title]
+other = "Archiv"
+
+[archive.subtitle]
+other = "Archiv"
+
+[archive.menu]
+other = "Archiv"
+
+[archive.post_total]
+one = "Insgesamt {{ . }} Artikel"
+other = "Insgesamt {{ . }} Artikel"
+
+[archive.empty]
+other = "Keine Artikel gefunden"
+
+# Kategorien
+[category.title]
+other = "Kategorien"
+
+[category.subtitle]
+other = "Kategorien"
+
+[category.menu]
+other = "Kategorien"
+
+[category.post_total]
+one = "Insgesamt {{ . }} Artikel"
+other = "Insgesamt {{ . }} Artikel"
+
+[category.posts]
+other = "Artikel"
+
+[category.more]
+other = "More..."
+
+[category.empty]
+other = "Keine Kategorien gefunden"
+
+# Schlagwörter
+[tag.title]
+other = "Schlagwörter"
+
+[tag.subtitle]
+other = "Schlagwörter"
+
+[tag.menu]
+other = "Schlagwörter"
+
+[tag.post_total]
+one = "Insgesamt {{ . }} Artikel"
+other = "Insgesamt {{ . }} Artikel"
+
+[tag.posts]
+other = "Artikel"
+
+[tag.empty]
+other = "Keine Schlagwörter gefunden"
+
+# Über
+[about.title]
+other = "Über"
+
+[about.subtitle]
+other = "Über"
+
+[about.menu]
+other = "Über"
+
+# Weblinks
+[links.title]
+other = "Weblinks"
+
+[links.subtitle]
+other = "Weblinks"
+
+[links.menu]
+other = "Weblinks"
+
+# 404 Seite
+[page404.title]
+other = "Die Seite wurde nicht gefunden"
+
+[page404.subtitle]
+other = "Die Seite wurde nicht gefunden"
+
+[page404.menu]
+other = "Die Seite wurde nicht gefunden"
+
+[page404.message]
+other = "Die gesuchte Seite existiert nicht"
+
+[page404.redirect]
+other = "Weiterleitung zur Startseite in {{ . }} Sekunden"
+
+[page404.back]
+other = "Zurück zur Startseite"
+
+[page404.seconds]
+other = "Sekunden"
+
+# Beitrag
+[post.toc]
+other = "Inhaltsverzeichnis"
+
+[post.prev]
+other = "Vorheriger"
+
+[post.next]
+other = "Nächster"
+
+[post.prev_post]
+other = "Vorheriger"
+
+[post.next_post]
+other = "Nächster"
+
+[post.updated]
+other = "Geändert am {{ . }}"
+
+[post.words]
+other = "Wörter"
+
+[post.min_read]
+other = "Minuten"
+
+[post.views]
+other = "Ansichten"
+
+[post.wordcount]
+other = "{{ . }} Wörter"
+
+[post.min2read]
+other = "{{ . }} Minuten"
+
+# Urheberrecht
+[copyright.author]
+other = "Beitragsautor"
+
+[copyright.posted]
+other = "Veröffentlicht am"
+
+[copyright.updated]
+other = "Geändert am"
+
+[copyright.licensed]
+other = "Urheberrechtshinweis"
+
+[copyright.CC]
+other = "CC - Creative Commons license"
+
+[copyright.BY]
+other = "BY - Attribution"
+
+[copyright.SA]
+other = "SA - Share-alike"
+
+[copyright.NC]
+other = "NC - Non-commercial"
+
+[copyright.ND]
+other = "ND - No derivative works"
+
+[copyright.ZERO]
+other = "CC0 - No Copyright"
+
+# Fußzeile
+[footer.pv]
+other = "Alle Aufrufe: {{ . }}"
+
+[footer.uv]
+other = "Alle Besucher: {{ . }}"
+
+# Suche
+[search.title]
+other = "Suchen"
+
+[search.subtitle]
+other = "Artikel suchen"
+
+[search.keyword]
+other = "Stichwort"
+
+[search.hint]
+other = "Artikel suchen..."
+
+[search.placeholder]
+other = "Suchen..."
+
+[search.no_results]
+other = "Keine Ergebnisse gefunden"
+
+[search.close]
+other = "Schließen"
+
+# Seitennummerierung
+[paginator.prev]
+other = "Zurück"
+
+[paginator.next]
+other = "Weiter"
+
+# Liste
+[list.empty]
+other = "Kein Inhalt gefunden"
+
+[list.posts]
+other = "Artikel"
+
+# Thema umschalten
+[theme.toggle]
+other = "Thema umschalten"
+
+[theme.light]
+other = "Heller Modus"
+
+[theme.dark]
+other = "Dunkler Modus"
+
+[theme.auto]
+other = "Automatisch"
+
+# Codeblock
+[code.copy]
+other = "Kopieren"
+
+[code.copied]
+other = "Kopiert"
+
+# Kommentare
+[post.comments]
+other = "Kommentare"
+
+[comments.loading]
+other = "Kommentare werden geladen..."
+
+[comments.noscript]
+other = "Bitte aktivieren Sie JavaScript, um Kommentare anzuzeigen"
+
+# Noscript-Warnung
+[noscript_warning]
+other = "Blog funktioniert am besten mit aktiviertem JavaScript"
+
+# Sprachumschaltung
+[language.switchTo]
+other = "Wechseln zu"

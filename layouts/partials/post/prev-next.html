@@ -1,0 +1,26 @@
+{{/* Previous / Next Post Navigation - 对标 hexo: layout/_partials/post/meta-bottom.ejs (prev/next 部分) */}}
+{{/* 上一篇/下一篇文章导航 */}}
+
+<div class="post-prevnext my-3">
+  {{/* 上一篇 */}}
+  <article class="post-prev col-6">
+    {{ with .PrevInSection }}
+      <a href="{{ .RelPermalink }}" title="{{ .Title }}">
+        <i class="iconfont icon-arrowleft"></i>
+        <span class="hidden-mobile">{{ .Title }}</span>
+        <span class="visible-mobile">{{ i18n "post.prev" | default "上一篇" }}</span>
+      </a>
+    {{ end }}
+  </article>
+
+  {{/* 下一篇 */}}
+  <article class="post-next col-6">
+    {{ with .NextInSection }}
+      <a href="{{ .RelPermalink }}" title="{{ .Title }}">
+        <span class="hidden-mobile">{{ .Title }}</span>
+        <span class="visible-mobile">{{ i18n "post.next" | default "下一篇" }}</span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+    {{ end }}
+  </article>
+</div>

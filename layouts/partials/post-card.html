@@ -1,0 +1,70 @@
+{{/* Post Card Component - 对标 hexo: layout/index.ejs */}}
+{{ $post_url := .RelPermalink }}
+{{ $index_img := .Params.index_img | default .Params.cover | default .Site.Params.post.default_index_img }}
+
+<div class="row mx-auto index-card">
+  {{/* 左侧图片 */}}
+  {{ if $index_img }}
+    <div class="col-12 col-md-4 m-auto index-img">
+      <a href="{{ $post_url }}">
+        <img src="{{ $index_img | relURL }}" alt="{{ .Title }}" loading="lazy" width="400" height="160" decoding="async">
+      </a>
+    </div>
+  {{ end }}
+
+  {{/* 右侧文章信息 */}}
+  <article class="col-12 col-md-{{ if $index_img }}8{{ else }}12{{ end }} mx-auto index-info">
+    {{/* 标题 */}}
+    <h2 class="index-header">
+      {{/* 置顶图标 */}}
+      {{ if and (.Site.Params.index.post_sticky.enable | default false) (.Params.sticky) }}
+        {{ $sticky_icon := .Site.Params.index.post_sticky.icon | default "iconfont icon-top" }}
+        <i class="index-pin {{ $sticky_icon }}" title="Pin on top"></i>
+      {{ end }}
+      <a href="{{ $post_url }}">{{ .Title }}</a>
+    </h2>
+
+    {{/* 摘要 */}}
+    {{ if .Site.Params.index.auto_excerpt.enable | default true }}
+      {{ $excerpt := .Description | default .Summary }}
+      <a class="index-excerpt {{ if not $index_img }}index-excerpt__noimg{{ end }}" href="{{ $post_url }}">
+        <div>
+          {{ $excerpt | plainify | truncate 200 }}
+        </div>
+      </a>
+    {{ end }}
+
+    {{/* 底部元信息 */}}
+    <div class="index-btm post-metas">
+      {{/* 日期 */}}
+      {{ if .Site.Params.index.post_meta.date | default true }}
+        <div class="post-meta mr-3">
+          <i class="iconfont icon-date"></i>
+          <time datetime="{{ .Date.Format "2006-01-02T15:04:05" }}" pubdate>
+            {{ .Date.Format "2006-01-02" }}
+          </time>
+        </div>
+      {{ end }}
+
+      {{/* 分类 */}}
+      {{ if and (.Site.Params.index.post_meta.category | default true) .Params.categories }}
+        <div class="post-meta mr-3 d-flex align-items-center">
+          <i class="iconfont icon-category"></i>
+          {{ range $i, $cat := first 1 .Params.categories }}
+            <a href="{{ "categories/" | relURL }}{{ $cat | urlize }}/">{{ $cat }}</a>
+          {{ end }}
+        </div>
+      {{ end }}
+
+      {{/* 标签 */}}
+      {{ if and (.Site.Params.index.post_meta.tag | default true) .Params.tags }}
+        <div class="post-meta">
+          <i class="iconfont icon-tags"></i>
+          {{ range .Params.tags }}
+            <a href="{{ "tags/" | relURL }}{{ . | urlize }}/">#{{ . }}</a>
+          {{ end }}
+        </div>
+      {{ end }}
+    </div>
+  </article>
+</div>

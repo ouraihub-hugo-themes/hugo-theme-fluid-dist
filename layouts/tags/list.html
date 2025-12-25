@@ -1,0 +1,106 @@
+{{ define "main" }}
+  {{/* Banner */}}
+  {{ $banner_img := .Site.Params.tag.banner_img | default "/img/default.png" }}
+  {{ $banner_height := .Site.Params.tag.banner_img_height | default 80 }}
+  {{ $banner_mask := .Site.Params.tag.banner_mask_alpha | default 0.3 }}
+
+  {{ partial "header/banner.html" (dict
+    "context" .
+    "banner_img" $banner_img
+    "banner_img_height" $banner_height
+    "banner_mask_alpha" $banner_mask
+    "title" (i18n "tag.title" | default "Tags")
+    "subtitle" (i18n "tag.subtitle" | default "")
+    "show_scroll_down" false
+  ) }}
+
+  {{/* Main Content */}}
+  <main>
+    <div id="board-ctn">
+      <div id="board" class="container">
+        <div class="row mx-auto">
+          <div class="col-12 col-md-10 mx-auto">
+            {{/* Tag Cloud - 对标 hexo: layout/tags.ejs */}}
+            {{ $tags := .Site.Taxonomies.tags }}
+            {{ if $tags }}
+              {{ $min_font := .Site.Params.tag.tagcloud.min_font | default 15 }}
+              {{ $max_font := .Site.Params.tag.tagcloud.max_font | default 30 }}
+              {{ $unit := .Site.Params.tag.tagcloud.unit | default "px" }}
+              {{ $start_color := .Site.Params.tag.tagcloud.start_color | default "#BBBBEE" }}
+              {{ $end_color := .Site.Params.tag.tagcloud.end_color | default "#337ab7" }}
+
+              {{/* Calculate min and max counts */}}
+              {{ $counts := slice }}
+              {{ range $tags }}
+                {{ $counts = $counts | append (len .Pages) }}
+              {{ end }}
+              {{ $min_count := 1 }}
+              {{ $max_count := 1 }}
+              {{ range $counts }}
+                {{ if lt . $min_count }}{{ $min_count = . }}{{ end }}
+                {{ if gt . $max_count }}{{ $max_count = . }}{{ end }}
+              {{ end }}
+
+              <div class="tagcloud text-center">
+                {{ range $name, $taxonomy := $tags }}
+                  {{ $count := len $taxonomy.Pages }}
+                  {{/* Calculate font size based on count */}}
+                  {{ $font_range := sub $max_font $min_font }}
+                  {{ $count_range := sub $max_count $min_count }}
+                  {{ $font_size := $min_font }}
+                  {{ $ratio := 0.0 }}
+                  {{ if gt $count_range 0 }}
+                    {{ $ratio = div (float (sub $count $min_count)) (float $count_range) }}
+                    {{ $font_size = add $min_font (mul $ratio $font_range) }}
+                  {{ end }}
+                  
+                  {{/* Calculate color based on count (interpolate between start_color and end_color) */}}
+                  {{/* Parse start color */}}
+                  {{ $sr := 0xBB }}
+                  {{ $sg := 0xBB }}
+                  {{ $sb := 0xEE }}
+                  {{ if hasPrefix $start_color "#" }}
+                    {{ $start_hex := strings.TrimPrefix "#" $start_color }}
+                    {{ if eq (len $start_hex) 6 }}
+                      {{ $sr = int (printf "0x%s" (substr $start_hex 0 2)) }}
+                      {{ $sg = int (printf "0x%s" (substr $start_hex 2 2)) }}
+                      {{ $sb = int (printf "0x%s" (substr $start_hex 4 2)) }}
+                    {{ end }}
+                  {{ end }}
+                  {{/* Parse end color */}}
+                  {{ $er := 0x33 }}
+                  {{ $eg := 0x7A }}
+                  {{ $eb := 0xB7 }}
+                  {{ if hasPrefix $end_color "#" }}
+                    {{ $end_hex := strings.TrimPrefix "#" $end_color }}
+                    {{ if eq (len $end_hex) 6 }}
+                      {{ $er = int (printf "0x%s" (substr $end_hex 0 2)) }}
+                      {{ $eg = int (printf "0x%s" (substr $end_hex 2 2)) }}
+                      {{ $eb = int (printf "0x%s" (substr $end_hex 4 2)) }}
+                    {{ end }}
+                  {{ end }}
+                  {{/* Interpolate color */}}
+                  {{ $r := int (add (float $sr) (mul $ratio (sub (float $er) (float $sr)))) }}
+                  {{ $g := int (add (float $sg) (mul $ratio (sub (float $eg) (float $sg)))) }}
+                  {{ $b := int (add (float $sb) (mul $ratio (sub (float $eb) (float $sb)))) }}
+                  {{ $color := printf "#%02x%02x%02x" $r $g $b }}
+                  
+                  <a href="{{ $taxonomy.Page.RelPermalink }}" 
+                     class="tag-cloud-item"
+                     style="font-size: {{ printf "%.0f" $font_size }}{{ $unit }}; color: {{ $color }};"
+                     title="{{ $count }} {{ i18n "tag.posts" | default "posts" }}">
+                    {{ $name }}
+                  </a>
+                {{ end }}
+              </div>
+            {{ else }}
+              <div class="text-center py-12 text-muted">
+                {{ i18n "tag.empty" | default "No tags found." }}
+              </div>
+            {{ end }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+{{ end }}

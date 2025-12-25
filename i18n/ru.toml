@@ -1,0 +1,282 @@
+# Hugo Theme Fluid - Русский перевод
+# Based on hexo-theme-fluid/languages/ru.yml
+
+[name]
+other = "Русский"
+
+# Навигация
+[nav.home]
+other = "Главная"
+
+[nav.archive]
+other = "Архивы"
+
+[nav.category]
+other = "Категории"
+
+[nav.tag]
+other = "Теги"
+
+[nav.about]
+other = "О"
+
+[nav.links]
+other = "Ссылки"
+
+[nav.toggle]
+other = "Переключить навигацию"
+
+# Главная
+[home.title]
+other = "Главная"
+
+[home.menu]
+other = "Главная"
+
+# Архивы
+[archive.title]
+other = "Архивы"
+
+[archive.subtitle]
+other = "Архивы"
+
+[archive.menu]
+other = "Архивы"
+
+[archive.post_total]
+one = "{{ . }} сообщение всего"
+other = "{{ . }} сообщений всего"
+
+[archive.empty]
+other = "Сообщения не найдены"
+
+# Категории
+[category.title]
+other = "Категории"
+
+[category.subtitle]
+other = "Категории"
+
+[category.menu]
+other = "Категории"
+
+[category.post_total]
+one = "{{ . }} сообщение всего"
+other = "{{ . }} сообщений всего"
+
+[category.posts]
+other = "сообщений"
+
+[category.more]
+other = "More..."
+
+[category.empty]
+other = "Категории не найдены"
+
+# Теги
+[tag.title]
+other = "Теги"
+
+[tag.subtitle]
+other = "Теги"
+
+[tag.menu]
+other = "Теги"
+
+[tag.post_total]
+one = "{{ . }} сообщение всего"
+other = "{{ . }} сообщений всего"
+
+[tag.posts]
+other = "сообщений"
+
+[tag.empty]
+other = "Теги не найдены"
+
+# О
+[about.title]
+other = "О"
+
+[about.subtitle]
+other = "О"
+
+[about.menu]
+other = "О"
+
+# Ссылки
+[links.title]
+other = "Ссылки"
+
+[links.subtitle]
+other = "Ссылки"
+
+[links.menu]
+other = "Ссылки"
+
+# Страница 404
+[page404.title]
+other = "Страница не найдена"
+
+[page404.subtitle]
+other = "Страница не найдена"
+
+[page404.menu]
+other = "Страница не найдена"
+
+[page404.message]
+other = "Страница, которую вы ищете, не существует"
+
+[page404.redirect]
+other = "Перенаправление на главную через {{ . }} секунд"
+
+[page404.back]
+other = "Вернуться на главную"
+
+[page404.seconds]
+other = "секунд"
+
+# Статья
+[post.toc]
+other = "Оглавление"
+
+[post.prev]
+other = "Предыдущий"
+
+[post.next]
+other = "Следующий"
+
+[post.prev_post]
+other = "Предыдущий"
+
+[post.next_post]
+other = "Следующий"
+
+[post.updated]
+other = "Последнее обновление {{ . }}"
+
+[post.words]
+other = "слов"
+
+[post.min_read]
+other = "минут"
+
+[post.views]
+other = "просмотров"
+
+[post.wordcount]
+other = "{{ . }} слов"
+
+[post.min2read]
+other = "{{ . }} минут"
+
+# Авторские права
+[copyright.author]
+other = "Автор"
+
+[copyright.posted]
+other = "Опубликовано"
+
+[copyright.updated]
+other = "Обновлено"
+
+[copyright.licensed]
+other = "Лицензировано под"
+
+[copyright.CC]
+other = "CC - Creative Commons license"
+
+[copyright.BY]
+other = "BY - Attribution"
+
+[copyright.SA]
+other = "SA - Share-alike"
+
+[copyright.NC]
+other = "NC - Non-commercial"
+
+[copyright.ND]
+other = "ND - No derivative works"
+
+[copyright.ZERO]
+other = "CC0 - No Copyright"
+
+# Подвал
+[footer.pv]
+other = "Просмотров: {{ . }}"
+
+[footer.uv]
+other = "Посетителей: {{ . }}"
+
+# Поиск
+[search.title]
+other = "Поиск"
+
+[search.subtitle]
+other = "Поиск статей"
+
+[search.keyword]
+other = "Ключевое слово"
+
+[search.hint]
+other = "Поиск любой статьи..."
+
+[search.placeholder]
+other = "Поиск..."
+
+[search.no_results]
+other = "Результаты не найдены"
+
+[search.close]
+other = "Закрыть"
+
+# Пагинация
+[paginator.prev]
+other = "Назад"
+
+[paginator.next]
+other = "Далее"
+
+# Список
+[list.empty]
+other = "Контент не найден"
+
+[list.posts]
+other = "сообщений"
+
+# Переключение темы
+[theme.toggle]
+other = "Переключить тему"
+
+[theme.light]
+other = "Светлый режим"
+
+[theme.dark]
+other = "Тёмный режим"
+
+[theme.auto]
+other = "Авто"
+
+# Блок кода
+[code.copy]
+other = "Копировать"
+
+[code.copied]
+other = "Скопировано"
+
+# Комментарии
+[post.comments]
+other = "Комментарии"
+
+[comments.loading]
+other = "Загрузка комментариев..."
+
+[comments.noscript]
+other = "Пожалуйста, включите JavaScript для просмотра комментариев"
+
+# Предупреждение без скрипта
+[noscript_warning]
+other = "Блог лучше всего работает с включенным JavaScript"
+
+# Переключение языка
+[language.switchTo]
+other = "Переключить на"

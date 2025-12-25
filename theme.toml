@@ -1,0 +1,15 @@
+# Hugo Theme Fluid
+# https://github.com/your-username/hugo-theme-fluid
+
+name = "Fluid"
+license = "MIT"
+licenselink = "https://github.com/your-username/hugo-theme-fluid/blob/main/LICENSE"
+description = "A Material Design theme for Hugo, ported from hexo-theme-fluid"
+homepage = "https://github.com/your-username/hugo-theme-fluid"
+tags = ["blog", "material-design", "responsive", "dark-mode", "search", "toc", "multilingual"]
+features = ["dark mode", "local search", "toc", "code highlight", "math", "mermaid", "comments", "analytics"]
+min_version = "0.120.0"
+
+[author]
+name = ""
+homepage = ""

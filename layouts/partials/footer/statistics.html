@@ -1,0 +1,70 @@
+{{/* Footer Statistics - 参考: hexo-theme-fluid/layout/_partials/footer/statistics.ejs */}}
+{{/* 支持 busuanzi, leancloud, umami 三种统计源 */}}
+
+{{ $source := .Site.Params.footer.statistics.source | default "busuanzi" }}
+
+{{/* PV/UV 格式化文本 - 优先使用 i18n，否则使用配置 */}}
+{{/* 使用 i18n 翻译，如果没有配置则使用默认值 */}}
+{{ $pvFormat := .Site.Params.footer.statistics.pv_format | default (i18n "footer.pv") }}
+{{ $uvFormat := .Site.Params.footer.statistics.uv_format | default (i18n "footer.uv") }}
+
+{{/* 分割格式化文本 */}}
+{{ $pvParts := split $pvFormat "{}" }}
+{{ $uvParts := split $uvFormat "{}" }}
+
+<div class="statistics">
+  {{ if eq $source "busuanzi" }}
+    {{/* 不蒜子统计 */}}
+    {{ if ge (len $pvParts) 2 }}
+    <span id="busuanzi_container_site_pv" style="display: none">
+      {{ index $pvParts 0 | safeHTML }}
+      <span id="busuanzi_value_site_pv"></span>
+      {{ index $pvParts 1 | safeHTML }}
+    </span>
+    {{ end }}
+    {{ if ge (len $uvParts) 2 }}
+    <span id="busuanzi_container_site_uv" style="display: none">
+      {{ index $uvParts 0 | safeHTML }}
+      <span id="busuanzi_value_site_uv"></span>
+      {{ index $uvParts 1 | safeHTML }}
+    </span>
+    {{ end }}
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  {{ else if eq $source "leancloud" }}
+    {{/* LeanCloud 统计 */}}
+    {{ if ge (len $pvParts) 2 }}
+    <span id="leancloud-site-pv-container" style="display: none">
+      {{ index $pvParts 0 | safeHTML }}
+      <span id="leancloud-site-pv"></span>
+      {{ index $pvParts 1 | safeHTML }}
+    </span>
+    {{ end }}
+    {{ if ge (len $uvParts) 2 }}
+    <span id="leancloud-site-uv-container" style="display: none">
+      {{ index $uvParts 0 | safeHTML }}
+      <span id="leancloud-site-uv"></span>
+      {{ index $uvParts 1 | safeHTML }}
+    </span>
+    {{ end }}
+    {{/* LeanCloud 脚本需要在 web_analytics 中配置 */}}
+
+  {{ else if eq $source "umami" }}
+    {{/* Umami 统计 */}}
+    {{ if ge (len $pvParts) 2 }}
+    <span id="umami-site-pv-container" style="display: none">
+      {{ index $pvParts 0 | safeHTML }}
+      <span id="umami-site-pv"></span>
+      {{ index $pvParts 1 | safeHTML }}
+    </span>
+    {{ end }}
+    {{ if ge (len $uvParts) 2 }}
+    <span id="umami-site-uv-container" style="display: none">
+      {{ index $uvParts 0 | safeHTML }}
+      <span id="umami-site-uv"></span>
+      {{ index $uvParts 1 | safeHTML }}
+    </span>
+    {{ end }}
+    {{/* Umami 脚本需要在 web_analytics 中配置 */}}
+  {{ end }}
+</div>

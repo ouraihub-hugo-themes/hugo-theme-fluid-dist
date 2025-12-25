@@ -1,0 +1,70 @@
+{{/*
+  Category Term Page - 对标 hexo: layout/category.ejs
+  
+  单个分类页面，显示该分类下的所有文章
+  使用归档列表样式，按年月分组显示
+  Requirements: 11.1
+*/}}
+
+{{ define "main" }}
+{{/* Banner */}}
+{{ $categoryTitle := .Title }}
+{{ partial "header/banner.html" (dict 
+  "context" . 
+  "banner_img" (.Site.Params.category.banner_img | default "/img/default.png")
+  "banner_img_height" (.Site.Params.category.banner_img_height | default 60)
+  "banner_mask_alpha" (.Site.Params.category.banner_mask_alpha | default 0.3)
+  "title" (printf "%s - %s" (i18n "category.title" | default "Category") $categoryTitle)
+  "subtitle" (printf "%s - %s" (i18n "category.subtitle" | default "Category") $categoryTitle)
+  "show_scroll_down" false
+) }}
+
+{{/* Main Content */}}
+<main>
+  <div id="board" class="container mx-auto px-4 py-8 -mt-8 relative z-10">
+    <div class="site-content mx-auto">
+      {{/* 获取该分类下的所有文章 */}}
+      {{ $posts := .Pages }}
+      {{ $totalPosts := len $posts }}
+      
+      {{/* 使用 Hugo 分页功能 */}}
+      {{ $paginator := .Paginate $posts }}
+      
+      {{/* 文章列表 - 对标 hexo: layout/_partials/archive-list.ejs */}}
+      <div class="list-group">
+        {{/* 文章总数 */}}
+        <p class="h4">{{ i18n "category.post_total" $totalPosts | default (printf "%d posts" $totalPosts) }}</p>
+        <hr class="border-line my-4">
+        
+        {{/* 按年分组显示当前页的文章 */}}
+        {{ $dateCursor := "" }}
+        {{ range $paginator.Pages }}
+          {{ $year := .Date.Format "2006" }}
+          {{ if ne $year $dateCursor }}
+            {{ $dateCursor = $year }}
+            <p class="h5 mt-6 mb-3 font-bold text-lg">{{ $year }}</p>
+          {{ end }}
+          <a href="{{ .RelPermalink }}" class="list-group-item list-group-item-action">
+            <time class="text-muted">{{ .Date.Format "01-02" }}</time>
+            <div class="list-group-item-title">{{ .Title }}</div>
+          </a>
+        {{ end }}
+        
+        {{/* 空状态 */}}
+        {{ if eq $totalPosts 0 }}
+        <div class="text-center py-12 text-muted">
+          {{ i18n "list.empty" | default "No posts found." }}
+        </div>
+        {{ end }}
+      </div>
+      
+      {{/* 分页组件 */}}
+      {{ if gt $paginator.TotalPages 1 }}
+      <div class="mt-8">
+        {{ partial "paginator.html" $paginator }}
+      </div>
+      {{ end }}
+    </div>
+  </div>
+</main>
+{{ end }}

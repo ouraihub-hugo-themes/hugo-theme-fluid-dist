@@ -1,0 +1,170 @@
+{{/* Banner - 参考 hexo: layout/_partials/header/banner.ejs */}}
+
+{{/* 检查是否通过 dict 传入了参数 */}}
+{{ $ctx := . }}
+{{ $has_context := false }}
+{{ if isset . "context" }}
+  {{ $ctx = .context }}
+  {{ $has_context = true }}
+{{ end }}
+
+{{/* 获取页面类型 - 对应 hexo-theme-fluid 的 scope 配置 */}}
+{{ $page_type := "home" }}
+{{ if $ctx.IsPage }}
+  {{ if eq $ctx.Type "post" }}
+    {{ $page_type = "post" }}
+  {{ else if eq $ctx.Type "about" }}
+    {{ $page_type = "about" }}
+  {{ else if eq $ctx.Type "links" }}
+    {{ $page_type = "links" }}
+  {{ else }}
+    {{ $page_type = "page" }}
+  {{ end }}
+{{ else if eq $ctx.Kind "taxonomy" }}
+  {{ if eq $ctx.Data.Singular "category" }}
+    {{ $page_type = "category" }}
+  {{ else if eq $ctx.Data.Singular "tag" }}
+    {{ $page_type = "tag" }}
+  {{ end }}
+{{ else if eq $ctx.Kind "section" }}
+  {{ if eq $ctx.Section "archives" }}
+    {{ $page_type = "archive" }}
+  {{ end }}
+{{ else if eq $ctx.Kind "404" }}
+  {{ $page_type = "404" }}
+{{ end }}
+
+{{/* 配置键名映射 - scope 使用 "home"，但配置使用 "index" */}}
+{{ $config_key := $page_type }}
+{{ if eq $page_type "home" }}
+  {{ $config_key = "index" }}
+{{ else if eq $page_type "404" }}
+  {{ $config_key = "page404" }}
+{{ end }}
+
+{{/* 从页面或全局配置获取 Banner 设置 */}}
+{{ $default_config := index $ctx.Site.Params $config_key | default dict }}
+
+{{/* 优先使用传入的参数，其次使用页面配置，最后使用全局配置 */}}
+{{ $banner_img := "" }}
+{{ $banner_img_height := 100 }}
+{{ $banner_mask_alpha := 0.3 }}
+
+{{ if $has_context }}
+  {{ $banner_img = .banner_img | default $ctx.Params.banner_img | default $default_config.banner_img | default "/img/default.png" }}
+  {{ $banner_img_height = .banner_img_height | default $ctx.Params.banner_img_height | default $default_config.banner_img_height | default 100 }}
+  {{ $banner_mask_alpha = .banner_mask_alpha | default $ctx.Params.banner_mask_alpha | default $default_config.banner_mask_alpha | default 0.3 }}
+{{ else }}
+  {{ $banner_img = $ctx.Params.banner_img | default $default_config.banner_img | default "/img/default.png" }}
+  {{ $banner_img_height = $ctx.Params.banner_img_height | default $default_config.banner_img_height | default 100 }}
+  {{ $banner_mask_alpha = $ctx.Params.banner_mask_alpha | default $default_config.banner_mask_alpha | default 0.3 }}
+{{ end }}
+
+{{/* 副标题 */}}
+{{ $subtitle := "" }}
+{{ $subtitle_set := false }}
+{{ if $has_context }}
+  {{ if isset . "subtitle" }}
+    {{ $subtitle = .subtitle }}
+    {{ $subtitle_set = true }}
+  {{ end }}
+{{ end }}
+{{ if and (not $subtitle_set) $ctx.IsHome }}
+  {{ $slogan := $ctx.Site.Params.index.slogan }}
+  {{ if $slogan.enable | default true }}
+    {{/* 如果 slogan.text 是数组，取第一个作为默认显示（打字机效果会随机选择） */}}
+    {{ if reflect.IsSlice $slogan.text }}
+      {{ $subtitle = index $slogan.text 0 | default $ctx.Site.Params.subtitle | default $ctx.Site.Title }}
+    {{ else }}
+      {{ $subtitle = $slogan.text | default $ctx.Site.Params.subtitle | default $ctx.Site.Title }}
+    {{ end }}
+  {{ end }}
+{{ else if and (not $subtitle_set) (eq $ctx.Kind "404") }}
+  {{/* 404 页面使用 i18n 翻译 */}}
+  {{ $subtitle = i18n "page404.subtitle" | default "404" }}
+{{ else if not $subtitle_set }}
+  {{ $subtitle = $ctx.Params.subtitle | default $ctx.Title }}
+{{ end }}
+
+{{/* 标题 - 支持传入 */}}
+{{ $title := $ctx.Title }}
+{{ if $has_context }}
+  {{ $title = .title | default $ctx.Title }}
+{{ end }}
+
+{{/* 视差滚动 */}}
+{{ $parallax := $ctx.Site.Params.banner.parallax | default true }}
+
+{{/* 打字机效果配置 */}}
+{{ $typing := $ctx.Site.Params.fun_features.typing }}
+{{ $typing_enable := $typing.enable | default true }}
+
+{{/* 检查 scope 配置 */}}
+{{ $scope := $typing.scope | default slice }}
+{{ $in_scope := true }}
+
+{{ if gt (len $scope) 0 }}
+  {{ $in_scope = false }}
+  {{ range $scope }}
+    {{ if eq . $page_type }}
+      {{ $in_scope = true }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+
+{{/* 检查页面是否禁用了 subtitle */}}
+{{ $subtitle_enabled := true }}
+{{ if isset $ctx.Params "subtitle" }}
+  {{ if eq $ctx.Params.subtitle false }}
+    {{ $subtitle_enabled = false }}
+  {{ end }}
+{{ end }}
+
+{{/* 是否启用打字机效果 */}}
+{{ $use_typing := and $typing_enable $in_scope $subtitle_enabled }}
+
+{{/* 是否显示向下滚动箭头 */}}
+{{ $show_scroll_down := true }}
+{{ if and $has_context (isset . "show_scroll_down") }}
+  {{ $show_scroll_down = .show_scroll_down }}
+{{ end }}
+
+<div
+  id="banner"
+  class="banner"
+  {{ if $parallax }}parallax="true"{{ end }}
+  style="background: url('{{ $banner_img | relURL }}') no-repeat center center; background-size: cover;"
+>
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, {{ $banner_mask_alpha }})">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          {{/* 打字机效果 */}}
+          {{ if $use_typing }}
+            <span id="subtitle" data-typed-text="{{ $subtitle }}">{{ $subtitle }}</span>
+          {{ else }}
+            <span id="subtitle">{{ $subtitle }}</span>
+          {{ end }}
+        </div>
+
+        {{/* 文章页显示元信息 */}}
+        {{ if and $ctx.IsPage (eq $ctx.Type "post") }}
+          {{ partial "post/meta-top.html" $ctx }}
+        {{ end }}
+      </div>
+
+      {{/* 向下滚动箭头 */}}
+      {{ $scroll_arrow := $ctx.Site.Params.scroll_down_arrow }}
+      {{ if and $show_scroll_down ($scroll_arrow.enable | default true) (ge (float $banner_img_height) ($scroll_arrow.banner_height_limit | default 80)) (ne $ctx.Kind "404") }}
+        <div class="scroll-down-bar">
+          <i class="iconfont icon-arrowdown"></i>
+        </div>
+      {{ end }}
+    </div>
+  </div>
+</div>
+
+{{/* 加载打字机效果脚本 */}}
+{{ if $use_typing }}
+  {{ partial "plugins/typed.html" $ctx }}
+{{ end }}

@@ -1,0 +1,27 @@
+{{/* Footer - 参考: hexo-theme-fluid/layout/_partials/footer.ejs */}}
+<footer class="footer">
+  <div class="footer-inner">
+    {{/* Custom Footer Content */}}
+    {{ with .Site.Params.footer.content }}
+    <div class="footer-content">
+      {{ . | safeHTML }}
+    </div>
+    {{ else }}
+    <div class="footer-content">
+      <a href="https://gohugo.io" target="_blank" rel="nofollow noopener"><span>Hugo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+    </div>
+    {{ end }}
+
+    {{/* Statistics - PV/UV 统计 */}}
+    {{ if .Site.Params.footer.statistics.enable }}
+      {{ partial "footer/statistics.html" . }}
+    {{ end }}
+
+    {{/* Beian - 备案信息 (Chinese ICP) */}}
+    {{ if .Site.Params.footer.beian.enable }}
+      {{ partial "footer/beian.html" . }}
+    {{ end }}
+  </div>
+</footer>

@@ -1,0 +1,136 @@
+{{/*
+  Category List Page - 对标 hexo: layout/categories.ejs
+  
+  分类列表页面，显示所有分类及其文章
+  支持折叠/展开、排序、文章数量限制
+  Requirements: 11.1, 11.3, 11.4
+*/}}
+
+{{ define "main" }}
+{{/* Banner */}}
+{{ partial "header/banner.html" (dict 
+  "context" . 
+  "banner_img" (.Site.Params.category.banner_img | default "/img/default.png")
+  "banner_img_height" (.Site.Params.category.banner_img_height | default 60)
+  "banner_mask_alpha" (.Site.Params.category.banner_mask_alpha | default 0.3)
+  "title" (i18n "category.title" | default "Categories")
+  "subtitle" (i18n "category.subtitle" | default "")
+  "show_scroll_down" false
+) }}
+
+{{/* Main Content */}}
+<main>
+  <div id="board" class="container mx-auto px-4 py-8 -mt-8 relative z-10">
+    <div class="site-content mx-auto">
+      {{/* 获取配置 */}}
+      {{ $orderBy := .Site.Params.category.order_by | default "-length" }}
+      {{ $collapseDepth := .Site.Params.category.collapse_depth | default 0 }}
+      {{ $postLimit := .Site.Params.category.post_limit | default 10 }}
+      {{ $postOrderBy := .Site.Params.category.post_order_by | default "-date" }}
+      
+      {{/* 获取所有分类 */}}
+      {{ $categories := .Site.Taxonomies.categories }}
+      
+      {{ if $categories }}
+        {{/* 将分类转换为可排序的切片 */}}
+        {{ $catSlice := slice }}
+        {{ range $name, $taxonomy := $categories }}
+          {{ $catSlice = $catSlice | append (dict "name" $name "taxonomy" $taxonomy "count" (len $taxonomy.Pages)) }}
+        {{ end }}
+        
+        {{/* 根据配置排序 */}}
+        {{ if eq $orderBy "name" }}
+          {{ $catSlice = sort $catSlice "name" }}
+        {{ else if eq $orderBy "-name" }}
+          {{ $catSlice = sort $catSlice "name" "desc" }}
+        {{ else if eq $orderBy "length" }}
+          {{ $catSlice = sort $catSlice "count" }}
+        {{ else }}
+          {{/* 默认 -length: 按文章数量降序 */}}
+          {{ $catSlice = sort $catSlice "count" "desc" }}
+        {{ end }}
+        
+        <div class="category-list">
+          {{ range $idx, $cat := $catSlice }}
+            {{ $name := $cat.name }}
+            {{ $taxonomy := $cat.taxonomy }}
+            {{ $count := $cat.count }}
+            {{ $collapsed := le $collapseDepth 0 }}
+            {{ $catId := md5 $name }}
+            
+            <div class="category">
+              <div class="category row nomargin-x">
+                {{/* 分类标题 - 可折叠 */}}
+                <a class="category-item {{ if $collapsed }}collapsed{{ end }} list-group-item category-item-action col-10 col-md-11"
+                   title="{{ $name }}"
+                   id="heading-{{ $catId }}"
+                   role="tab"
+                   data-toggle="collapse"
+                   href="#collapse-{{ $catId }}"
+                   aria-expanded="{{ if not $collapsed }}true{{ else }}false{{ end }}"
+                   onclick="this.classList.toggle('collapsed'); document.getElementById('collapse-{{ $catId }}').classList.toggle('show');">
+                  {{ $name }}
+                  <i class="iconfont icon-arrowright"></i>
+                </a>
+                
+                {{/* 文章数量链接 */}}
+                <a href="{{ "categories/" | relURL }}{{ $name | urlize }}/" class="category-count col-2 col-md-1">
+                  <i class="iconfont icon-articles"></i>
+                  <span>{{ $count }}</span>
+                </a>
+              </div>
+              
+              {{/* 分类下的文章列表 */}}
+              <div class="category-collapse collapse {{ if not $collapsed }}show{{ end }}" 
+                   id="collapse-{{ $catId }}"
+                   role="tabpanel" 
+                   aria-labelledby="heading-{{ $catId }}">
+                <div class="category-post-list">
+                  {{/* 获取并排序文章 */}}
+                  {{ $posts := $taxonomy.Pages }}
+                  {{ if eq $postOrderBy "title" }}
+                    {{ $posts = sort $posts "Title" }}
+                  {{ else if eq $postOrderBy "-title" }}
+                    {{ $posts = sort $posts "Title" "desc" }}
+                  {{ else if eq $postOrderBy "date" }}
+                    {{ $posts = sort $posts "Date" }}
+                  {{ else }}
+                    {{/* 默认 -date: 按日期降序 */}}
+                    {{ $posts = sort $posts "Date" "desc" }}
+                  {{ end }}
+                  
+                  {{/* 限制显示数量 */}}
+                  {{ $displayPosts := $posts }}
+                  {{ if and (gt $postLimit 0) (gt (len $posts) $postLimit) }}
+                    {{ $displayPosts = first $postLimit $posts }}
+                  {{ end }}
+                  
+                  {{ range $displayPosts }}
+                    <a href="{{ .RelPermalink }}" title="{{ .Title }}"
+                       class="list-group-item list-group-item-action">
+                      <span class="category-post">{{ .Title }}</span>
+                    </a>
+                  {{ end }}
+                  
+                  {{/* 显示更多链接 */}}
+                  {{ if and (gt $postLimit 0) (gt (len $posts) $postLimit) }}
+                    <a href="{{ "categories/" | relURL }}{{ $name | urlize }}/" 
+                       class="list-group-item list-group-item-action">
+                      <span class="category-post">{{ i18n "category.more" | default "More" }} →</span>
+                    </a>
+                  {{ end }}
+                </div>
+              </div>
+            </div>
+          {{ end }}
+        </div>
+      {{ else }}
+        {{/* 空状态 */}}
+        <div class="text-center py-12 text-muted">
+          {{ i18n "category.empty" | default "No categories found." }}
+        </div>
+      {{ end }}
+    </div>
+  </div>
+</main>
+{{ end }}

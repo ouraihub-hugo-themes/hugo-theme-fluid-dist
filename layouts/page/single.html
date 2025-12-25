@@ -1,0 +1,51 @@
+{{ define "main" }}
+{{/*
+  通用页面模板 - 对标 hexo-theme-fluid layout/page.ejs
+  用于文档页、社群页等自定义页面
+  通过 hugo new page 命令创建的页面使用此模板
+  
+  注意：Banner 已在 header/header.html 中渲染，此处不需要重复调用
+*/}}
+
+{{/* Markdown Plugins - Fancybox 图片放大 */}}
+{{ if and (.Site.Params.post.image_zoom.enable | default true) (ne .Params.image_zoom false) }}
+  {{ partial "plugins/fancybox.html" . }}
+{{ end }}
+
+{{/* AnchorJS 锚点链接 */}}
+{{ if .Site.Params.fun_features.anchorjs.enable | default true }}
+  {{ partial "plugins/anchorjs.html" . }}
+{{ end }}
+
+{{/* Math 数学公式支持 - 需要在 Front-matter 中设置 math: true */}}
+{{ if .Params.math }}
+  {{ partial "plugins/math.html" . }}
+{{ end }}
+
+{{/* Mermaid 流程图支持 - 需要在 Front-matter 中设置 mermaid: true */}}
+{{ if .Params.mermaid }}
+  {{ partial "plugins/mermaid.html" . }}
+{{ end }}
+
+{{/* Main Content */}}
+<div id="board" class="container mx-auto px-4 py-8 -mt-16 relative z-10">
+  <div class="row">
+    <div class="col-12 col-lg-10 mx-auto">
+      {{/* Page Content - 对标 hexo-theme-fluid page-content */}}
+      <article class="page-content board p-6 md:p-8">
+        {{/* Markdown Body */}}
+        <div class="markdown-body prose prose-lg max-w-none">
+          {{ .Content }}
+        </div>
+      </article>
+
+      {{/* Comments - 对标 hexo-theme-fluid inject_point('pageComments') */}}
+      {{ if .Params.comments | default false }}
+      <article id="comments" class="mt-8">
+        {{ partial "comments/comments.html" . }}
+      </article>
+      {{ end }}
+    </div>
+  </div>
+</div>
+{{ end }}

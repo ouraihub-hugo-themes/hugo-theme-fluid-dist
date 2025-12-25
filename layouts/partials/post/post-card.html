@@ -1,0 +1,90 @@
+{{/*
+  Post Card Component - 对标 hexo: layout/index.ejs
+  
+  文章卡片组件，用于首页文章列表展示
+  包含：封面图、标题、置顶图标、摘要、元信息（日期、分类、标签）
+*/}}
+
+{{ $post_url := .RelPermalink }}
+{{ $post_url_target := .Site.Params.index.post_url_target | default "_self" }}
+{{ $index_img := .Params.index_img | default .Params.cover | default .Site.Params.post.default_index_img }}
+
+<div class="row mx-auto index-card">
+  {{/* 左侧封面图 - 对标 hexo: layout/index.ejs 的 index_img 部分 */}}
+  {{ if $index_img }}
+    <div class="col-12 col-md-4 m-auto index-img">
+      <a href="{{ $post_url }}" target="{{ $post_url_target }}">
+        <img src="{{ $index_img | relURL }}" alt="{{ .Title }}" loading="lazy" width="400" height="160" decoding="async">
+      </a>
+    </div>
+  {{ end }}
+
+  {{/* 右侧文章信息 */}}
+  <article class="col-12 col-md-{{ if $index_img }}8{{ else }}12{{ end }} mx-auto index-info">
+    {{/* 标题 - 对标 hexo: layout/index.ejs 的 index-header 部分 */}}
+    <h2 class="index-header">
+      {{/* 置顶图标 - 对标 hexo: theme.index.post_sticky */}}
+      {{ if and (.Site.Params.index.post_sticky.enable | default true) .Params.sticky }}
+        {{ if gt (int .Params.sticky) 0 }}
+          {{ $sticky_icon := .Site.Params.index.post_sticky.icon | default "iconfont icon-top" }}
+          <i class="index-pin {{ $sticky_icon }}" title="Pin on top"></i>
+        {{ end }}
+      {{ end }}
+      <a href="{{ $post_url }}" target="{{ $post_url_target }}">{{ .Title }}</a>
+    </h2>
+
+    {{/* 摘要 - 对标 hexo: layout/index.ejs 的 index-excerpt 部分 */}}
+    {{ if .Site.Params.index.auto_excerpt.enable | default true }}
+      {{/* 优先使用 description，其次是 excerpt，最后是 summary */}}
+      {{ $excerpt := .Description | default .Params.excerpt | default .Summary }}
+      <a class="index-excerpt {{ if not $index_img }}index-excerpt__noimg{{ end }}" href="{{ $post_url }}" target="{{ $post_url_target }}">
+        <div>
+          {{/* 去除 HTML 标签，截取前 200 字符，替换换行为空格 */}}
+          {{ $excerpt | plainify | truncate 200 | replaceRE "\n" " " }}
+        </div>
+      </a>
+    {{ end }}
+
+    {{/* 底部元信息 - 对标 hexo: layout/index.ejs 的 index-btm post-metas 部分 */}}
+    <div class="index-btm post-metas">
+      {{/* 日期 - 对标 hexo: theme.index.post_meta.date */}}
+      {{ if .Site.Params.index.post_meta.date | default true }}
+        <div class="post-meta mr-3">
+          <i class="iconfont icon-date"></i>
+          <time datetime="{{ .Date.Format "2006-01-02T15:04:05" }}" pubdate>
+            {{ .Date.Format "2006-01-02" }}
+          </time>
+        </div>
+      {{ end }}
+
+      {{/* 分类 - 对标 hexo: theme.index.post_meta.category */}}
+      {{ if and (.Site.Params.index.post_meta.category | default true) .Params.categories }}
+        <div class="post-meta mr-3 d-flex align-items-center">
+          <i class="iconfont icon-category"></i>
+          {{/* 只显示第一个分类，对标 hexo 的 limit: 1 */}}
+          {{ range $i, $cat := first 1 .Params.categories }}
+            {{ with $.Site.GetPage (printf "/categories/%s" (urlize $cat)) }}
+              <a href="{{ .RelPermalink }}" class="category-chain-item">{{ $cat }}</a>
+            {{ else }}
+              <a href="{{ "categories/" | relURL }}{{ $cat | urlize }}/" class="category-chain-item">{{ $cat }}</a>
+            {{ end }}
+          {{ end }}
+        </div>
+      {{ end }}
+
+      {{/* 标签 - 对标 hexo: theme.index.post_meta.tag */}}
+      {{ if and (.Site.Params.index.post_meta.tag | default true) .Params.tags }}
+        <div class="post-meta">
+          <i class="iconfont icon-tags"></i>
+          {{ range .Params.tags }}
+            {{ with $.Site.GetPage (printf "/tags/%s" (urlize .)) }}
+              <a href="{{ .RelPermalink }}">#{{ . }}</a>
+            {{ else }}
+              <a href="{{ "tags/" | relURL }}{{ . | urlize }}/">#{{ . }}</a>
+            {{ end }}
+          {{ end }}
+        </div>
+      {{ end }}
+    </div>
+  </article>
+</div>

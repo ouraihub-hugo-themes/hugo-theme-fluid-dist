@@ -1,0 +1,121 @@
+{{- define "main" -}}
+{{/* 
+  404 页面模板
+  参考: hexo-theme-fluid/layout/404.ejs
+  
+  功能:
+  - 显示 404 错误提示
+  - 自动跳转到首页（可配置延迟）
+  - 返回首页链接
+  
+  配置项 (params.toml):
+  - page404.enable: 是否启用 404 页面
+  - page404.banner_img: Banner 图片
+  - page404.banner_img_height: Banner 高度百分比
+  - page404.banner_mask_alpha: Banner 蒙版透明度
+  - page404.redirect_delay: 自动跳转延迟（毫秒），0 表示不自动跳转
+*/}}
+
+{{/* 获取配置 */}}
+{{- $redirect_delay := .Site.Params.page404.redirect_delay | default 5000 -}}
+{{- $redirect_seconds := div $redirect_delay 1000 -}}
+
+{{/* Main Content */}}
+<div class="container mx-auto px-4 py-8 -mt-16 relative z-10">
+  <div class="board p-6 md:p-8 text-center">
+    {{/* 404 图标 */}}
+    <div class="text-6xl mb-6">🔍</div>
+    
+    {{/* 标题 */}}
+    <h1 class="text-4xl font-bold text-post-heading mb-4">
+      {{ i18n "page404.title" | default "Page not found" }}
+    </h1>
+    
+    {{/* 描述信息 */}}
+    <p class="text-lg text-sec mb-6">
+      {{ i18n "page404.message" | default "The page you are looking for does not exist" }}
+    </p>
+
+    {{/* 自动跳转倒计时提示 */}}
+    {{- if gt $redirect_delay 0 -}}
+    <p class="text-sm text-muted mb-6" id="redirect-message">
+      {{- $redirectMsg := i18n "page404.redirect" $redirect_seconds -}}
+      {{- if $redirectMsg -}}
+        {{ $redirectMsg }}
+      {{- else -}}
+        Redirecting to home in {{ $redirect_seconds }} seconds
+      {{- end -}}
+    </p>
+    {{- end -}}
+
+    {{/* 返回首页按钮 */}}
+    <a 
+      href="{{ .Site.BaseURL }}" 
+      class="btn btn-primary inline-flex items-center gap-2"
+    >
+      {{/* 首页图标 */}}
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-5 w-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+        />
+      </svg>
+      {{ i18n "page404.back" | default "Back to Home" }}
+    </a>
+  </div>
+</div>
+
+{{/* 自动跳转脚本 */}}
+{{- if gt $redirect_delay 0 -}}
+<script>
+  (function() {
+    var delay = {{ $redirect_delay }};
+    var seconds = Math.floor(delay / 1000);
+    var messageEl = document.getElementById('redirect-message');
+    var homeUrl = '{{ .Site.BaseURL }}';
+    
+    // 更新倒计时消息
+    function updateMessage() {
+      if (messageEl && seconds > 0) {
+        // 使用简单的格式，避免 i18n 复杂性
+        var lang = document.documentElement.lang || 'en';
+        if (lang.startsWith('zh')) {
+          messageEl.textContent = seconds + ' 秒后自动跳转到首页';
+        } else if (lang.startsWith('ja')) {
+          messageEl.textContent = seconds + ' 秒後にホームページへリダイレクトします';
+        } else {
+          messageEl.textContent = 'Redirecting to home in ' + seconds + ' seconds';
+        }
+      }
+    }
+
+    // 倒计时
+    var countdown = setInterval(function() {
+      seconds--;
+      updateMessage();
+      if (seconds <= 0) {
+        clearInterval(countdown);
+      }
+    }, 1000);
+
+    // 延迟后跳转
+    setTimeout(function() {
+      window.location.href = homeUrl;
+    }, delay);
+  })();
+</script>
+{{- end -}}
+
+{{- end -}}
+
+{{/* 覆盖 baseof.html 中的 head block，设置 404 页面特定的参数 */}}
+{{- define "head" -}}
+{{- end -}}

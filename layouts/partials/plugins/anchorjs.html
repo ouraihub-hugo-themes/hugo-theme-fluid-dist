@@ -1,0 +1,122 @@
+{{/*
+  锚点链接 - AnchorJS
+  参考: hexo-theme-fluid/layout/_partials/plugins/anchorjs.ejs
+  Requirements: 28.1, 28.2, 28.3, 28.4
+  
+  功能:
+  - 为文章标题添加锚点图标
+  - 支持配置锚点位置 (left/right)
+  - 支持配置显示方式 (hover/always)
+  - 支持自定义锚点图标
+  - 点击锚点更新 URL 并可复制分享
+*/}}
+
+{{ if .Site.Params.fun_features.anchorjs.enable }}
+{{/* AnchorJS CDN */}}
+<script src="https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // 获取配置
+    var placement = '{{ .Site.Params.fun_features.anchorjs.placement | default "left" }}';
+    var visible = '{{ .Site.Params.fun_features.anchorjs.visible | default "hover" }}';
+    var icon = '{{ .Site.Params.fun_features.anchorjs.icon | default "" }}';
+    var element = '{{ .Site.Params.fun_features.anchorjs.element | default "h1,h2,h3,h4,h5,h6" }}';
+    
+    // 配置 AnchorJS 选项
+    window.anchors.options = {
+      placement: placement,
+      visible: visible
+    };
+    
+    // 如果配置了自定义图标，则使用
+    if (icon) {
+      window.anchors.options.icon = icon;
+    }
+    
+    // 构建选择器，只选择 .markdown-body 或 .post-content 内的标题
+    var elements = element.split(',');
+    var selectors = [];
+    for (var i = 0; i < elements.length; i++) {
+      var el = elements[i].trim();
+      // 优先选择 .markdown-body 内的标题，兼容 .post-content
+      selectors.push('.markdown-body > ' + el);
+      selectors.push('.post-content > ' + el);
+    }
+    
+    // 如果是左侧放置，添加特殊样式类
+    if (placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    
+    // 添加锚点
+    window.anchors.add(selectors.join(', '));
+    
+    // 注册刷新回调（用于 PJAX 等场景）
+    if (typeof Fluid !== 'undefined' && Fluid.events && Fluid.events.registerRefreshCallback) {
+      Fluid.events.registerRefreshCallback(function() {
+        if ('anchors' in window) {
+          anchors.removeAll();
+          if (placement === 'left') {
+            anchors.options.class = 'anchorjs-link-left';
+          }
+          anchors.add(selectors.join(', '));
+        }
+      });
+    }
+  });
+</script>
+
+{{/* AnchorJS 样式 */}}
+<style>
+  /* AnchorJS 基础样式 */
+  .anchorjs-link {
+    color: var(--post-link-color, #0366d6);
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+  }
+  
+  .anchorjs-link:hover {
+    color: var(--link-hover-color, #30a9de);
+  }
+  
+  /* 左侧放置样式 */
+  .anchorjs-link-left {
+    position: absolute;
+    margin-left: -1.25em !important;
+    padding-right: 0.25em;
+  }
+  
+  /* 确保标题有相对定位以支持左侧锚点 */
+  .markdown-body h1,
+  .markdown-body h2,
+  .markdown-body h3,
+  .markdown-body h4,
+  .markdown-body h5,
+  .markdown-body h6,
+  .post-content h1,
+  .post-content h2,
+  .post-content h3,
+  .post-content h4,
+  .post-content h5,
+  .post-content h6 {
+    position: relative;
+  }
+  
+  /* hover 模式下的显示效果 */
+  .anchorjs-link {
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out, color 0.2s ease-in-out;
+  }
+  
+  *:hover > .anchorjs-link,
+  .anchorjs-link:focus {
+    opacity: 1;
+  }
+  
+  /* always 模式下始终显示 */
+  .anchorjs-link[data-anchorjs-visible="always"] {
+    opacity: 1;
+  }
+</style>
+{{ end }}

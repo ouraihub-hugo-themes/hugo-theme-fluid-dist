@@ -1,0 +1,84 @@
+{{ define "main" }}
+{{/*
+  友链页面模板 (列表页版本) - 对标 hexo-theme-fluid/layout/links.ejs
+  用于处理 content/links/_index.md 的情况
+  参考: hexo: layout/links.ejs
+  Requirements: 14.1, 14.2, 14.3, 14.4
+*/}}
+
+{{/* Banner */}}
+{{ $banner_img := .Params.banner_img | default .Site.Params.links.banner_img | default "/img/default.png" }}
+{{ $banner_height := .Params.banner_img_height | default .Site.Params.links.banner_img_height | default 60 }}
+{{ $banner_mask := .Params.banner_mask_alpha | default .Site.Params.links.banner_mask_alpha | default 0.3 }}
+
+{{ partial "header/banner.html" (dict
+  "context" .
+  "banner_img" $banner_img
+  "banner_img_height" $banner_height
+  "banner_mask_alpha" $banner_mask
+  "title" (.Title | default (i18n "links.title" | default "Links"))
+  "subtitle" (.Params.subtitle | default (i18n "links.subtitle" | default ""))
+  "show_scroll_down" false
+) }}
+
+{{/* Main Content - 对标 hexo-theme-fluid board 结构 */}}
+<div id="board" class="container mx-auto px-4">
+  <div class="row">
+    <div class="col-12 col-md-10 mx-auto">
+      {{/* Links Grid - 对标 hexo-theme-fluid .links 结构 */}}
+      <div class="links row">
+        {{ range .Site.Params.links.items }}
+          {{ if and .title .link }}
+            <div class="card col-lg-4 col-md-6 col-sm-12">
+              <a href="{{ .link }}" class="card-body hover-with-bg" target="_blank" rel="noopener noreferrer">
+                <div class="card-content">
+                  {{/* Avatar */}}
+                  {{ if or .avatar .image }}
+                    <div class="link-avatar">
+                      <img src="{{ .avatar | default .image }}" 
+                           alt="{{ .title }}"
+                           width="48"
+                           height="48"
+                           loading="lazy"
+                           decoding="async"
+                           onerror="this.onerror=null; this.src='{{ $.Site.Params.links.onerror_avatar | default "/img/avatar.png" }}'">
+                    </div>
+                  {{ end }}
+                  {{/* Text */}}
+                  <div class="link-text">
+                    <div class="link-title">{{ .title }}</div>
+                    <div class="link-intro">{{ .intro | default "" }}</div>
+                  </div>
+                </div>
+              </a>
+            </div>
+          {{ end }}
+        {{ end }}
+      </div>
+
+      {{/* Custom Content - 对标 hexo-theme-fluid links.custom */}}
+      {{ if and .Site.Params.links.custom.enable .Site.Params.links.custom.content }}
+        <div class="custom mx-auto">
+          {{ .Site.Params.links.custom.content | safeHTML }}
+        </div>
+      {{ end }}
+
+      {{/* Page Content - Markdown 内容 */}}
+      {{ if .Content }}
+        <article class="links-content page-content mt-8">
+          <div class="markdown-body">
+            {{ .Content }}
+          </div>
+        </article>
+      {{ end }}
+
+      {{/* Comments - 对标 hexo-theme-fluid linksComments */}}
+      {{ if .Site.Params.links.comments.enable }}
+        <article id="comments" class="mt-8">
+          {{ partial "comments/comments.html" . }}
+        </article>
+      {{ end }}
+    </div>
+  </div>
+</div>
+{{ end }}

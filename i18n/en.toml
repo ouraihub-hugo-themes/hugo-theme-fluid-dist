@@ -1,0 +1,285 @@
+# Hugo Theme Fluid - English Translation
+# Based on hexo-theme-fluid/languages/en.yml
+
+[name]
+other = "English"
+
+# Navigation
+[nav.home]
+other = "Home"
+
+[nav.archive]
+other = "Archives"
+
+[nav.category]
+other = "Categories"
+
+[nav.tag]
+other = "Tags"
+
+[nav.about]
+other = "About"
+
+[nav.links]
+other = "Links"
+
+[nav.toggle]
+other = "Toggle navigation"
+
+# Home
+[home.title]
+other = "Home"
+
+[home.menu]
+other = "Home"
+
+# Archives
+[archive.title]
+other = "Archives"
+
+[archive.subtitle]
+other = "Archives"
+
+[archive.menu]
+other = "Archives"
+
+[archive.post_total]
+one = "{{ . }} post in total"
+other = "{{ . }} posts in total"
+
+[archive.empty]
+other = "No posts found"
+
+# Categories
+[category.title]
+other = "Categories"
+
+[category.subtitle]
+other = "Categories"
+
+[category.menu]
+other = "Categories"
+
+[category.post_total]
+one = "{{ . }} post in total"
+other = "{{ . }} posts in total"
+
+[category.posts]
+other = "posts"
+
+[category.more]
+other = "More..."
+
+[category.empty]
+other = "No categories found"
+
+# Tags
+[tag.title]
+other = "Tags"
+
+[tag.subtitle]
+other = "Tags"
+
+[tag.menu]
+other = "Tags"
+
+[tag.post_total]
+one = "{{ . }} post in total"
+other = "{{ . }} posts in total"
+
+[tag.posts]
+other = "posts"
+
+[tag.empty]
+other = "No tags found"
+
+# About
+[about.title]
+other = "About"
+
+[about.subtitle]
+other = "About"
+
+[about.menu]
+other = "About"
+
+# Links
+[links.title]
+other = "Links"
+
+[links.subtitle]
+other = "Links"
+
+[links.menu]
+other = "Links"
+
+# 404 Page
+[page404.title]
+other = "Page not found"
+
+[page404.subtitle]
+other = "Page not found"
+
+[page404.menu]
+other = "Page not found"
+
+[page404.message]
+other = "The page you are looking for does not exist"
+
+[page404.redirect]
+other = "Redirecting to home in {{ . }} seconds"
+
+[page404.back]
+other = "Back to Home"
+
+[page404.seconds]
+other = "seconds"
+
+# Post
+[post.toc]
+other = "Table of Contents"
+
+[post.prev]
+other = "Previous"
+
+[post.next]
+other = "Next"
+
+[post.prev_post]
+other = "Previous"
+
+[post.next_post]
+other = "Next"
+
+[post.updated]
+other = "Last updated on {{ . }}"
+
+[post.words]
+other = "words"
+
+[post.min_read]
+other = "mins"
+
+[post.views]
+other = "views"
+
+[post.wordcount]
+other = "{{ . }} words"
+
+[post.min2read]
+other = "{{ . }} mins"
+
+# Copyright
+[copyright.author]
+other = "Author"
+
+[copyright.posted]
+other = "Posted on"
+
+[copyright.updated]
+other = "Updated on"
+
+[copyright.licensed]
+other = "Licensed under"
+
+[copyright.CC]
+other = "CC - Creative Commons license"
+
+[copyright.BY]
+other = "BY - Attribution"
+
+[copyright.SA]
+other = "SA - Share-alike"
+
+[copyright.NC]
+other = "NC - Non-commercial"
+
+[copyright.ND]
+other = "ND - No derivative works"
+
+[copyright.ZERO]
+other = "CC0 - No Copyright"
+
+# Footer
+[footer.pv]
+other = "Views: {{ . }}"
+
+[footer.uv]
+other = "Visitors: {{ . }}"
+
+# Search
+[search.title]
+other = "Search"
+
+[search.subtitle]
+other = "Search posts"
+
+[search.keyword]
+other = "Keyword"
+
+[search.hint]
+other = "Search any article..."
+
+[search.placeholder]
+other = "Search posts..."
+
+[search.no_results]
+other = "No results found"
+
+[search.close]
+other = "Close"
+
+# Pagination
+[paginator.prev]
+other = "Prev"
+
+[paginator.next]
+other = "Next"
+
+# List
+[list.empty]
+other = "No content found"
+
+[list.posts]
+other = "posts"
+
+# Theme Toggle
+[theme.toggle]
+other = "Toggle theme"
+
+[theme.light]
+other = "Light mode"
+
+[theme.dark]
+other = "Dark mode"
+
+[theme.auto]
+other = "Auto"
+
+# Code Block
+[code.copy]
+other = "Copy"
+
+[code.copied]
+other = "Copied"
+
+# Comments
+[post.comments]
+other = "Comments"
+
+[comments.loading]
+other = "Loading comments..."
+
+[comments.noscript]
+other = "Please enable JavaScript to view comments"
+
+# Noscript Warning
+[noscript_warning]
+other = "Blog works best with JavaScript enabled"
+
+# Language Switch
+[language.switchTo]
+other = "Switch to"
+
+[language.switch]
+other = "Switch language"

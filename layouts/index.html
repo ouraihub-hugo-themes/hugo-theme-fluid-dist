@@ -1,0 +1,59 @@
+{{ define "main" }}
+{{/* SEO: Hidden H1 - 对标 hexo: layout/index.ejs */}}
+<h1 style="display: none">{{ .Site.Title }}</h1>
+
+{{/* Main Content Board - 对标 hexo: layout/layout.ejs */}}
+<div class="container nopadding-x-md">
+  <div id="board">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-md-10 m-auto">
+          {{/* 
+            Post List - 对标 hexo: layout/index.ejs
+            1. 首先获取所有文章
+            2. 按置顶 (sticky) 和日期排序
+            3. 分页显示
+          */}}
+          
+          {{/* 获取所有文章 */}}
+          {{ $allPosts := where .Site.RegularPages "Section" "in" .Site.Params.mainSections }}
+          
+          {{/* 分离置顶和普通文章 */}}
+          {{ $stickyPosts := slice }}
+          {{ $normalPosts := slice }}
+          
+          {{ range $allPosts }}
+            {{ if and ($.Site.Params.index.post_sticky.enable | default true) .Params.sticky }}
+              {{ $stickyPosts = $stickyPosts | append . }}
+            {{ else }}
+              {{ $normalPosts = $normalPosts | append . }}
+            {{ end }}
+          {{ end }}
+          
+          {{/* 置顶文章按 sticky 值倒序排列（值越大越靠前） */}}
+          {{ $stickyPosts = sort $stickyPosts ".Params.sticky" "desc" }}
+          
+          {{/* 普通文章按日期倒序排列 */}}
+          {{ $normalPosts = sort $normalPosts ".Date" "desc" }}
+          
+          {{/* 合并：置顶文章在前，普通文章在后 */}}
+          {{ $sortedPosts := $stickyPosts | append $normalPosts }}
+          
+          {{/* 分页 */}}
+          {{ $paginator := .Paginate $sortedPosts }}
+          
+          {{/* 渲染文章卡片 */}}
+          {{ range $paginator.Pages }}
+            {{ partial "post/post-card.html" . }}
+          {{ end }}
+          
+          {{/* 分页组件 */}}
+          {{ if gt $paginator.TotalPages 1 }}
+            {{ partial "paginator.html" $paginator }}
+          {{ end }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{{ end }}

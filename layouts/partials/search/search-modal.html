@@ -1,0 +1,231 @@
+{{/*
+  搜索模态框 - 使用 Pagefind 实现
+  参考: hexo-theme-fluid/layout/_partials/search.ejs
+  Requirements: 16.1, 16.2, 16.3, 16.4
+*/}}
+
+{{/* Pagefind CSS */}}
+<link href="/pagefind/pagefind-ui.css" rel="stylesheet">
+
+{{/* Search Modal - 对标 hexo-theme-fluid 的模态框结构 */}}
+<div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      {{/* Modal Header */}}
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">{{ i18n "search.title" | default "搜索" }}</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {{/* Modal Body - Pagefind Search */}}
+      <div class="modal-body mx-3">
+        <div id="pagefind-search"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{/* Pagefind Script - 页面加载时立即初始化 */}}
+<script src="/pagefind/pagefind-ui.js"></script>
+<script>
+(function() {
+  let pagefindInitialized = false;
+  
+  function initPagefind() {
+    if (pagefindInitialized) return;
+    
+    const container = document.getElementById('pagefind-search');
+    if (!container) return;
+    
+    // 检查 PagefindUI 是否可用
+    if (typeof PagefindUI === 'undefined') {
+      showDevWarning(container);
+      return;
+    }
+    
+    // 检查 pagefind 文件是否存在
+    fetch('/pagefind/pagefind.js')
+      .then(function(response) {
+        if (!response.ok) {
+          showDevWarning(container);
+          return;
+        }
+        
+        // 初始化 Pagefind UI
+        new PagefindUI({
+          element: '#pagefind-search',
+          showSubResults: true,
+          showImages: false,
+        });
+        
+        pagefindInitialized = true;
+      })
+      .catch(function() {
+        showDevWarning(container);
+      });
+  }
+  
+  function showDevWarning(container) {
+    var lang = document.documentElement.lang || 'en';
+    var title, message, command, hint;
+    
+    if (lang.indexOf('zh') === 0) {
+      title = '开发模式提示';
+      message = '您需要先构建项目才能使用搜索功能。';
+      command = 'pnpm run build';
+      hint = '构建完成后，可以使用 pnpm dev 继续开发。';
+    } else if (lang.indexOf('ja') === 0) {
+      title = '開発モードの警告';
+      message = '検索機能を使用するには、プロジェクトをビルドする必要があります。';
+      command = 'pnpm run build';
+      hint = 'ビルド後、pnpm dev で開発を続けることができます。';
+    } else {
+      title = 'DEV Mode Warning';
+      message = 'You need to build the project to use search.';
+      command = 'pnpm run build';
+      hint = 'After building, you can use pnpm dev to continue development.';
+    }
+    
+    container.innerHTML = 
+      '<div style="padding: 1rem; text-align: center;">' +
+        '<p style="font-weight: 600; font-size: 1.1rem; margin-bottom: 0.5rem;">' + title + '</p>' +
+        '<p style="margin-bottom: 0.75rem;">' + message + '</p>' +
+        '<code style="background: #f5f5f5; padding: 0.25rem 0.5rem; border-radius: 4px;">' + command + '</code>' +
+        '<p style="margin-top: 0.75rem; font-size: 0.875rem; opacity: 0.8;">' + hint + '</p>' +
+      '</div>';
+  }
+  
+  // 页面加载完成后初始化 Pagefind
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPagefind);
+  } else {
+    initPagefind();
+  }
+})();
+</script>
+
+{{/* Pagefind Custom Styles for Modal */}}
+<style>
+  /* Modal 基础样式 */
+  #modalSearch .modal-content {
+    background-color: var(--board-bg-color, #fff);
+    color: var(--text-color, #3c4858);
+  }
+  
+  #modalSearch .modal-header {
+    border-bottom: 1px solid var(--line-color, #eee);
+  }
+  
+  #modalSearch .modal-title {
+    color: var(--text-color, #3c4858);
+  }
+  
+  #modalSearch .close {
+    color: var(--text-color, #3c4858);
+    opacity: 0.7;
+  }
+  
+  #modalSearch .close:hover {
+    opacity: 1;
+  }
+
+  /* Pagefind UI 变量 */
+  #modalSearch #pagefind-search {
+    --pagefind-ui-font: inherit;
+    --pagefind-ui-text: var(--text-color, #3c4858);
+    --pagefind-ui-background: var(--board-bg-color, #fff);
+    --pagefind-ui-border: var(--line-color, #eee);
+    --pagefind-ui-primary: var(--link-color, #0366d6);
+    --pagefind-ui-tag: var(--board-bg-color, #fff);
+    --pagefind-ui-border-radius: 0.25rem;
+    --pagefind-ui-border-width: 1px;
+    --pagefind-ui-scale: 1;
+  }
+
+  /* 隐藏 Pagefind 默认搜索图标 */
+  #modalSearch .pagefind-ui__form::before {
+    display: none !important;
+  }
+
+  /* 搜索输入框样式 - 对标原版 Fluid */
+  #modalSearch .pagefind-ui__search-input {
+    font-weight: 400;
+    font-size: 1rem;
+    padding: 0.5rem 0.75rem !important;
+    border: none !important;
+    border-bottom: 1px solid var(--link-color, #0366d6) !important;
+    border-radius: 0 !important;
+    background-color: transparent !important;
+    color: var(--text-color, #3c4858) !important;
+    box-shadow: none !important;
+    width: 100% !important;
+  }
+
+  #modalSearch .pagefind-ui__search-input:focus {
+    outline: none !important;
+    border-bottom: 2px solid var(--link-color, #0366d6) !important;
+  }
+  
+  #modalSearch .pagefind-ui__search-input::placeholder {
+    color: var(--text-color, #3c4858);
+    opacity: 0.6;
+  }
+
+  /* 搜索结果标题链接 */
+  #modalSearch .pagefind-ui__result-title a {
+    color: var(--link-color, #0366d6);
+  }
+
+  #modalSearch .pagefind-ui__result-title a:hover {
+    color: var(--link-hover-color, #30a9de);
+  }
+
+  /* 搜索高亮 */
+  #modalSearch mark {
+    background-color: var(--link-color, #0366d6);
+    color: white;
+    padding: 0 2px;
+    border-radius: 2px;
+  }
+  
+  /* 搜索结果列表 */
+  #modalSearch .pagefind-ui__results {
+    margin-top: 1rem;
+  }
+  
+  #modalSearch .pagefind-ui__result {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--line-color, #eee);
+  }
+  
+  #modalSearch .pagefind-ui__result:last-child {
+    border-bottom: none;
+  }
+
+  /* 深色模式 */
+  [data-user-color-scheme="dark"] #modalSearch .modal-content {
+    background-color: var(--board-bg-color, #252d38);
+    color: var(--text-color, #c4c6c9);
+  }
+
+  [data-user-color-scheme="dark"] #modalSearch .modal-header {
+    border-bottom-color: var(--line-color, #435266);
+  }
+  
+  [data-user-color-scheme="dark"] #modalSearch .modal-title {
+    color: var(--text-color, #c4c6c9);
+  }
+
+  [data-user-color-scheme="dark"] #modalSearch .close {
+    color: var(--text-color, #c4c6c9);
+  }
+  
+  [data-user-color-scheme="dark"] #modalSearch .pagefind-ui__search-input::placeholder {
+    color: var(--text-color, #c4c6c9);
+  }
+  
+  [data-user-color-scheme="dark"] #modalSearch .pagefind-ui__result {
+    border-bottom-color: var(--line-color, #435266);
+  }
+</style>

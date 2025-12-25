@@ -1,0 +1,66 @@
+{{/* NProgress 进度条 */}}
+{{/* 参考: hexo-theme-fluid/layout/_partials/plugins/nprogress.ejs */}}
+{{/* Requirements: 20.1, 20.2, 20.3 */}}
+
+{{ if .Site.Params.fun_features.progressbar.enable }}
+  {{/* NProgress CSS */}}
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css"
+  />
+
+  {{/* 自定义进度条样式 */}}
+  <style>
+    /* 进度条颜色和高度 */
+    #nprogress .bar {
+      background: {{ .Site.Params.fun_features.progressbar.color | default "#29d" }} !important;
+      height: {{ .Site.Params.fun_features.progressbar.height_px | default 3 }}px !important;
+    }
+
+    /* 进度条光晕效果 */
+    #nprogress .peg {
+      box-shadow: 0 0 10px {{ .Site.Params.fun_features.progressbar.color | default "#29d" }},
+        0 0 5px {{ .Site.Params.fun_features.progressbar.color | default "#29d" }} !important;
+    }
+
+    /* 旋转器颜色（如果启用） */
+    #nprogress .spinner-icon {
+      border-top-color: {{ .Site.Params.fun_features.progressbar.color | default "#29d" }} !important;
+      border-left-color: {{ .Site.Params.fun_features.progressbar.color | default "#29d" }} !important;
+    }
+  </style>
+
+  {{/* NProgress JS */}}
+  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+  {{/* 初始化 NProgress - 延迟到 DOM 准备好后执行 */}}
+  <script>
+    // 配置 NProgress
+    NProgress.configure({
+      showSpinner: {{ .Site.Params.fun_features.progressbar.show_spinner | default false }},
+      trickleSpeed: {{ .Site.Params.fun_features.progressbar.trickle_speed | default 100 }},
+      minimum: {{ .Site.Params.fun_features.progressbar.minimum | default 0.08 }},
+      parent: 'body'
+    });
+
+    // 等待 body 元素存在后再启动进度条
+    function startNProgress() {
+      if (document.body) {
+        NProgress.start();
+      } else {
+        // 如果 body 还不存在，等待 DOM 加载
+        document.addEventListener('DOMContentLoaded', function() {
+          NProgress.start();
+        });
+      }
+    }
+
+    // 尝试启动
+    startNProgress();
+
+    // 页面加载完成时结束进度条
+    window.addEventListener('load', function() {
+      NProgress.done();
+    });
+  </script>
+{{ end }}

@@ -1,0 +1,104 @@
+{{/*
+  Category Sidebar - 分类侧边栏
+  参考: hexo-theme-fluid/layout/_partials/post/category-bar.ejs
+  参考: hexo-theme-fluid/layout/_partials/category-list.ejs
+  
+  Requirements: 9.1, 9.2, 9.4
+  - 9.1: WHEN post.category_bar.enable 为 true 且文章设置了分类 THEN 在侧边栏显示同分类文章列表
+  - 9.2: WHEN 配置 category_bar.placement THEN 将分类栏放置在指定位置（左侧或右侧）
+  - 9.4: WHEN 文章数量超过 post_limit THEN 显示 More 链接
+*/}}
+
+{{/* 获取当前文章的分类 */}}
+{{ $currentCategories := .Params.categories }}
+
+{{/* 如果文章有分类，显示分类侧边栏 */}}
+{{ if $currentCategories }}
+  {{/* 获取配置 */}}
+  {{ $postLimit := .Site.Params.post.category_bar.post_limit | default 0 }}
+  {{ $postOrderBy := .Site.Params.post.category_bar.post_order_by | default "title" }}
+  
+  {{/* 支持 category_bar 参数指定特定分类 */}}
+  {{ $targetCategories := $currentCategories }}
+  {{ if .Params.category_bar }}
+    {{ if reflect.IsSlice .Params.category_bar }}
+      {{ $targetCategories = .Params.category_bar }}
+    {{ end }}
+  {{ end }}
+
+  <div class="category-bar">
+    <div class="category-list">
+      {{/* 遍历目标分类 */}}
+      {{ range $idx, $categoryName := $targetCategories }}
+        {{/* 获取该分类下的所有文章 */}}
+        {{ $categoryPages := where $.Site.RegularPages "Params.categories" "intersect" (slice $categoryName) }}
+        
+        {{/* 排序文章 */}}
+        {{ $sortedPages := $categoryPages }}
+        {{ if eq $postOrderBy "title" }}
+          {{ $sortedPages = sort $categoryPages "Title" }}
+        {{ else if eq $postOrderBy "-title" }}
+          {{ $sortedPages = sort $categoryPages "Title" "desc" }}
+        {{ else if eq $postOrderBy "date" }}
+          {{ $sortedPages = sort $categoryPages "Date" }}
+        {{ else if eq $postOrderBy "-date" }}
+          {{ $sortedPages = sort $categoryPages "Date" "desc" }}
+        {{ end }}
+
+        {{/* 生成唯一 ID */}}
+        {{ $collapseId := printf "collapse-%s" ($categoryName | urlize) }}
+        {{ $headingId := printf "heading-%s" ($categoryName | urlize) }}
+
+        <div class="category row nomargin-x">
+          {{/* 分类标题 */}}
+          <a class="category-item category-item-action list-group-item col-10 col-md-11"
+             title="{{ $categoryName }}"
+             id="{{ $headingId }}"
+             role="tab"
+             data-toggle="collapse"
+             href="#{{ $collapseId }}"
+             aria-expanded="true"
+             aria-controls="{{ $collapseId }}">
+            {{ $categoryName }}
+            <span class="list-group-count">({{ len $categoryPages }})</span>
+            <i class="iconfont icon-arrowright"></i>
+          </a>
+
+          {{/* 文章列表 */}}
+          <div class="category-collapse collapse show"
+               id="{{ $collapseId }}"
+               role="tabpanel"
+               aria-labelledby="{{ $headingId }}">
+            <div class="category-post-list">
+              {{/* 限制显示数量 */}}
+              {{ $displayPages := $sortedPages }}
+              {{ $showMore := false }}
+              {{ if and (gt $postLimit 0) (gt (len $sortedPages) $postLimit) }}
+                {{ $displayPages = first $postLimit $sortedPages }}
+                {{ $showMore = true }}
+              {{ end }}
+
+              {{/* 渲染文章列表 */}}
+              {{ range $displayPages }}
+                {{ $isActive := eq $.RelPermalink .RelPermalink }}
+                <a href="{{ .RelPermalink }}"
+                   title="{{ .Title }}"
+                   class="list-group-item list-group-item-action{{ if $isActive }} active{{ end }}">
+                  <span class="category-post">{{ .Title }}</span>
+                </a>
+              {{ end }}
+
+              {{/* More 链接 */}}
+              {{ if $showMore }}
+                <a href="{{ "categories/" | relURL }}{{ $categoryName | urlize }}/"
+                   class="list-group-item list-group-item-action">
+                  <span class="category-post">{{ i18n "category.more" | default "More..." }}</span>
+                </a>
+              {{ end }}
+            </div>
+          </div>
+        </div>
+      {{ end }}
+    </div>
+  </div>
+{{ end }}

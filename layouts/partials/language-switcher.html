@@ -1,0 +1,121 @@
+{{- /*
+Language Switcher Component
+语言切换组件 - 下拉菜单样式
+
+功能：
+- 显示当前语言的简短标识
+- 点击/悬浮显示下拉菜单
+- 列出所有可用语言
+- 如果有翻译，链接到翻译页面
+- 如果没有翻译，跳转到目标语言首页
+
+参考: hugo-theme-paper: layouts/partials/language-switcher.html
+Requirements: 29.1, 29.2, 29.3, 29.4
+*/ -}}
+
+{{- if hugo.IsMultilingual -}}
+  {{- /* 获取当前语言的简短标识 */ -}}
+  {{- $currentLang := .Language.Lang -}}
+  {{- $currentDisplay := "" -}}
+  {{- if or (eq $currentLang "zh-CN") (eq $currentLang "zh-cn") (eq $currentLang "zh") -}}
+    {{- $currentDisplay = "简" -}}
+  {{- else if or (eq $currentLang "zh-TW") (eq $currentLang "zh-tw") (eq $currentLang "tw") -}}
+    {{- $currentDisplay = "繁" -}}
+  {{- else if or (eq $currentLang "zh-HK") (eq $currentLang "zh-hk") -}}
+    {{- $currentDisplay = "港" -}}
+  {{- else if or (eq $currentLang "ja") (hasPrefix $currentLang "ja") -}}
+    {{- $currentDisplay = "日" -}}
+  {{- else if or (eq $currentLang "en") (hasPrefix $currentLang "en") -}}
+    {{- $currentDisplay = "EN" -}}
+  {{- else if or (eq $currentLang "de") (hasPrefix $currentLang "de") -}}
+    {{- $currentDisplay = "DE" -}}
+  {{- else if or (eq $currentLang "es") (hasPrefix $currentLang "es") -}}
+    {{- $currentDisplay = "ES" -}}
+  {{- else if or (eq $currentLang "ru") (hasPrefix $currentLang "ru") -}}
+    {{- $currentDisplay = "RU" -}}
+  {{- else if or (eq $currentLang "eo") (hasPrefix $currentLang "eo") -}}
+    {{- $currentDisplay = "EO" -}}
+  {{- else -}}
+    {{- $currentDisplay = upper $currentLang -}}
+  {{- end -}}
+
+  <div class="language-dropdown">
+    {{- /* 当前语言按钮 */ -}}
+    <a class="nav-link language-current" href="javascript:;" 
+       aria-label="{{ i18n "language.switchTo" | default "Switch language" }}"
+       title="{{ i18n "language.switchTo" | default "Switch language" }}">
+      <span class="language-code">{{ $currentDisplay }}</span>
+      <i class="iconfont icon-arrowdown language-arrow"></i>
+    </a>
+    
+    {{- /* 下拉菜单 */ -}}
+    <div class="language-menu">
+      {{- /* 遍历所有语言 */ -}}
+      {{- range .Site.Languages -}}
+        {{- $targetLang := .Lang -}}
+        {{- $langName := .LanguageName -}}
+        
+        {{- /* 获取语言简短标识 */ -}}
+        {{- $langDisplay := "" -}}
+        {{- if or (eq $targetLang "zh-CN") (eq $targetLang "zh-cn") (eq $targetLang "zh") -}}
+          {{- $langDisplay = "简" -}}
+        {{- else if or (eq $targetLang "zh-TW") (eq $targetLang "zh-tw") (eq $targetLang "tw") -}}
+          {{- $langDisplay = "繁" -}}
+        {{- else if or (eq $targetLang "zh-HK") (eq $targetLang "zh-hk") -}}
+          {{- $langDisplay = "港" -}}
+        {{- else if or (eq $targetLang "ja") (hasPrefix $targetLang "ja") -}}
+          {{- $langDisplay = "日" -}}
+        {{- else if or (eq $targetLang "en") (hasPrefix $targetLang "en") -}}
+          {{- $langDisplay = "EN" -}}
+        {{- else if or (eq $targetLang "de") (hasPrefix $targetLang "de") -}}
+          {{- $langDisplay = "DE" -}}
+        {{- else if or (eq $targetLang "es") (hasPrefix $targetLang "es") -}}
+          {{- $langDisplay = "ES" -}}
+        {{- else if or (eq $targetLang "ru") (hasPrefix $targetLang "ru") -}}
+          {{- $langDisplay = "RU" -}}
+        {{- else if or (eq $targetLang "eo") (hasPrefix $targetLang "eo") -}}
+          {{- $langDisplay = "EO" -}}
+        {{- else -}}
+          {{- $langDisplay = upper $targetLang -}}
+        {{- end -}}
+        
+        {{- /* 确定链接目标 */ -}}
+        {{- $targetURL := "" -}}
+        {{- $isCurrentLang := eq $targetLang $.Language.Lang -}}
+        
+        {{- if $isCurrentLang -}}
+          {{- /* 当前语言，不需要链接 */ -}}
+        {{- else -}}
+          {{- /* 检查是否有翻译版本 */ -}}
+          {{- $hasTranslation := false -}}
+          {{- range $.Translations -}}
+            {{- if eq .Language.Lang $targetLang -}}
+              {{- $targetURL = .RelPermalink -}}
+              {{- $hasTranslation = true -}}
+            {{- end -}}
+          {{- end -}}
+          
+          {{- /* 如果没有翻译，跳转到目标语言首页 */ -}}
+          {{- if not $hasTranslation -}}
+            {{- $targetURL = printf "/%s/" $targetLang -}}
+          {{- end -}}
+        {{- end -}}
+        
+        {{- if $isCurrentLang -}}
+          {{- /* 当前语言项 - 高亮显示 */ -}}
+          <span class="language-item language-item-current">
+            <span class="language-code">{{ $langDisplay }}</span>
+            <span class="language-name">{{ $langName }}</span>
+          </span>
+        {{- else -}}
+          {{- /* 其他语言项 */ -}}
+          <a class="language-item" href="{{ $targetURL }}"
+             title="{{ i18n "language.switchTo" | default "Switch to" }} {{ $langName }}">
+            <span class="language-code">{{ $langDisplay }}</span>
+            <span class="language-name">{{ $langName }}</span>
+          </a>
+        {{- end -}}
+      {{- end -}}
+    </div>
+  </div>
+{{- end -}}

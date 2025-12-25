@@ -1,0 +1,282 @@
+# Hugo Theme Fluid - Traducción al Español
+# Based on hexo-theme-fluid/languages/es.yml
+
+[name]
+other = "Español"
+
+# Navegación
+[nav.home]
+other = "Inicio"
+
+[nav.archive]
+other = "Archivo"
+
+[nav.category]
+other = "Categorías"
+
+[nav.tag]
+other = "Etiquetas"
+
+[nav.about]
+other = "Acerca"
+
+[nav.links]
+other = "Enlaces"
+
+[nav.toggle]
+other = "Alternar navegación"
+
+# Inicio
+[home.title]
+other = "Inicio"
+
+[home.menu]
+other = "Inicio"
+
+# Archivo
+[archive.title]
+other = "Archivo"
+
+[archive.subtitle]
+other = "Archivo"
+
+[archive.menu]
+other = "Archivo"
+
+[archive.post_total]
+one = "{{ . }} artículo en total"
+other = "{{ . }} artículos en total"
+
+[archive.empty]
+other = "No se encontraron artículos"
+
+# Categorías
+[category.title]
+other = "Categorías"
+
+[category.subtitle]
+other = "Categorías"
+
+[category.menu]
+other = "Categorías"
+
+[category.post_total]
+one = "{{ . }} artículo en total"
+other = "{{ . }} artículos en total"
+
+[category.posts]
+other = "artículos"
+
+[category.more]
+other = "Más..."
+
+[category.empty]
+other = "No se encontraron categorías"
+
+# Etiquetas
+[tag.title]
+other = "Etiquetas"
+
+[tag.subtitle]
+other = "Etiquetas"
+
+[tag.menu]
+other = "Etiquetas"
+
+[tag.post_total]
+one = "{{ . }} artículo en total"
+other = "{{ . }} artículos en total"
+
+[tag.posts]
+other = "artículos"
+
+[tag.empty]
+other = "No se encontraron etiquetas"
+
+# Acerca
+[about.title]
+other = "Acerca"
+
+[about.subtitle]
+other = "Acerca"
+
+[about.menu]
+other = "Acerca"
+
+# Enlaces
+[links.title]
+other = "Enlaces"
+
+[links.subtitle]
+other = "Enlaces"
+
+[links.menu]
+other = "Enlaces"
+
+# Página 404
+[page404.title]
+other = "Página no encontrada"
+
+[page404.subtitle]
+other = "Página no encontrada"
+
+[page404.menu]
+other = "Página no encontrada"
+
+[page404.message]
+other = "La página que busca no existe"
+
+[page404.redirect]
+other = "Redirigiendo al inicio en {{ . }} segundos"
+
+[page404.back]
+other = "Volver al inicio"
+
+[page404.seconds]
+other = "segundos"
+
+# Artículo
+[post.toc]
+other = "Tabla de Contenidos"
+
+[post.prev]
+other = "Anterior"
+
+[post.next]
+other = "Siguiente"
+
+[post.prev_post]
+other = "Anterior"
+
+[post.next_post]
+other = "Siguiente"
+
+[post.updated]
+other = "Última actualización el {{ . }}"
+
+[post.words]
+other = "palabras"
+
+[post.min_read]
+other = "minutos"
+
+[post.views]
+other = "vistas"
+
+[post.wordcount]
+other = "{{ . }} palabras"
+
+[post.min2read]
+other = "{{ . }} minutos"
+
+# Derechos de autor
+[copyright.author]
+other = "Autor"
+
+[copyright.posted]
+other = "Publicado el"
+
+[copyright.updated]
+other = "Actualizado el"
+
+[copyright.licensed]
+other = "Licencia bajo"
+
+[copyright.CC]
+other = "CC - Licencia Creative Commons"
+
+[copyright.BY]
+other = "BY - Atribución"
+
+[copyright.SA]
+other = "SA - Compartir igual"
+
+[copyright.NC]
+other = "NC - No comercial"
+
+[copyright.ND]
+other = "ND - Sin obras derivadas"
+
+[copyright.ZERO]
+other = "CC0 - Sin derechos autorales"
+
+# Pie de página
+[footer.pv]
+other = "Vistas: {{ . }}"
+
+[footer.uv]
+other = "Visitantes: {{ . }}"
+
+# Búsqueda
+[search.title]
+other = "Buscar"
+
+[search.subtitle]
+other = "Buscar artículos"
+
+[search.keyword]
+other = "Palabra clave"
+
+[search.hint]
+other = "Buscar cualquier artículo..."
+
+[search.placeholder]
+other = "Buscar..."
+
+[search.no_results]
+other = "No se encontraron resultados"
+
+[search.close]
+other = "Cerrar"
+
+# Paginación
+[paginator.prev]
+other = "Anterior"
+
+[paginator.next]
+other = "Siguiente"
+
+# Lista
+[list.empty]
+other = "No se encontró contenido"
+
+[list.posts]
+other = "artículos"
+
+# Cambio de tema
+[theme.toggle]
+other = "Cambiar tema"
+
+[theme.light]
+other = "Modo claro"
+
+[theme.dark]
+other = "Modo oscuro"
+
+[theme.auto]
+other = "Automático"
+
+# Bloque de código
+[code.copy]
+other = "Copiar"
+
+[code.copied]
+other = "Copiado"
+
+# Comentarios
+[post.comments]
+other = "Comentarios"
+
+[comments.loading]
+other = "Cargando comentarios..."
+
+[comments.noscript]
+other = "Por favor habilite JavaScript para ver los comentarios"
+
+# Advertencia sin script
+[noscript_warning]
+other = "El blog funciona mejor con JavaScript habilitado"
+
+# Cambio de idioma
+[language.switchTo]
+other = "Cambiar a"

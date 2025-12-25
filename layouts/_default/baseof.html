@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="{{ .Site.Language.Lang | default "en" }}" data-user-color-scheme="auto">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    {{/* Theme Color - for mobile browsers */}}
+    <meta name="theme-color" content="{{ .Site.Params.color.navbar_bg_color | default "#2f4154" }}" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="{{ .Site.Params.color.navbar_bg_color_dark | default "#1f3144" }}" media="(prefers-color-scheme: dark)" />
+
+    {{/* Preconnect to external resources for better performance */}}
+    <link rel="preconnect" href="//at.alicdn.com" crossorigin />
+    <link rel="dns-prefetch" href="//at.alicdn.com" />
+
+    {{/* Title */}}
+    <title>
+      {{- if .IsHome -}}
+        {{ .Site.Title }}
+      {{- else -}}
+        {{ .Title }} {{ .Site.Params.tab_title_separator | default " - " }} {{ .Site.Title }}
+      {{- end -}}
+    </title>
+
+    {{/* Favicon */}}
+    {{ with .Site.Params.favicon }}
+      <link rel="icon" href="{{ . | relURL }}" />
+    {{ end }}
+    {{ with .Site.Params.apple_touch_icon }}
+      <link rel="apple-touch-icon" href="{{ . | relURL }}" />
+    {{ end }}
+
+    {{/* SEO Meta */}}
+    {{ partial "head/seo-meta.html" . }}
+
+    {{/* Color Schema Script - Load early to prevent flash */}}
+    <script src="{{ "js/color-schema.js" | relURL }}"></script>
+
+    {{/* Export Config - 导出主题配置到 JavaScript */}}
+    {{ partial "head/export-config.html" . }}
+
+    {{/* Iconfont - Fluid 图标库 */}}
+    <link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css" />
+    <link rel="stylesheet" href="{{ .Site.Params.iconfont | default "//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css" }}" />
+
+    {{/* Styles */}}
+    <link rel="stylesheet" href="{{ "css/main.css" | relURL }}" />
+
+    {{/* Custom CSS */}}
+    {{ range .Site.Params.custom_css }}
+      <link rel="stylesheet" href="{{ . | relURL }}" />
+    {{ end }}
+
+    {{/* RSS */}}
+    {{ with .OutputFormats.Get "RSS" }}
+      <link
+        rel="alternate"
+        type="application/rss+xml"
+        title="{{ $.Site.Title }}"
+        href="{{ .RelPermalink }}"
+      />
+    {{ end }}
+
+    {{/* NProgress 进度条 */}}
+    {{ partial "plugins/nprogress.html" . }}
+
+    {{/* Block for additional head content */}}
+    {{ block "head" . }}{{ end }}
+  </head>
+
+  <body>
+    {{/* Skip Link for Accessibility */}}
+    <a href="#board" class="skip-link">{{ i18n "accessibility.skip_to_content" | default "Skip to content" }}</a>
+
+    {{/* Header / Navbar */}}
+    {{ partial "header/header.html" . }}
+
+    {{/* Main Content */}}
+    <main>
+      {{ block "main" . }}{{ end }}
+    </main>
+
+    {{/* Footer */}}
+    {{ partial "footer/footer.html" . }}
+
+    {{/* Back to Top */}}
+    {{ if .Site.Params.scroll_top_arrow.enable | default true }}
+      {{ partial "back-to-top.html" . }}
+    {{ end }}
+
+    {{/* Search Modal */}}
+    {{ if .Site.Params.search.enable | default true }}
+      {{ partial "search/search-modal.html" . }}
+    {{ end }}
+
+    {{/* Main Script */}}
+    <script src="{{ "js/main.js" | relURL }}" defer></script>
+
+    {{/* Custom JS */}}
+    {{ range .Site.Params.custom_js }}
+      <script src="{{ . | relURL }}" defer></script>
+    {{ end }}
+
+    {{/* Block for additional scripts */}}
+    {{ block "scripts" . }}{{ end }}
+  </body>
+</html>

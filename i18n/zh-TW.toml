@@ -1,0 +1,285 @@
+# Hugo Theme Fluid - 正體中文翻譯
+# Based on hexo-theme-fluid/languages/zh-TW.yml
+
+[name]
+other = "正體中文"
+
+# 導航選單
+[nav.home]
+other = "首頁"
+
+[nav.archive]
+other = "歸檔"
+
+[nav.category]
+other = "分類"
+
+[nav.tag]
+other = "標籤"
+
+[nav.about]
+other = "關於"
+
+[nav.links]
+other = "連結"
+
+[nav.toggle]
+other = "切換導航"
+
+# 首頁
+[home.title]
+other = "首頁"
+
+[home.menu]
+other = "首頁"
+
+# 歸檔頁
+[archive.title]
+other = "歸檔"
+
+[archive.subtitle]
+other = "歸檔"
+
+[archive.menu]
+other = "歸檔"
+
+[archive.post_total]
+one = "共有 {{ . }} 篇文章"
+other = "共有 {{ . }} 篇文章"
+
+[archive.empty]
+other = "暫無文章"
+
+# 分類頁
+[category.title]
+other = "分類"
+
+[category.subtitle]
+other = "分類"
+
+[category.menu]
+other = "分類"
+
+[category.post_total]
+one = "共有 {{ . }} 篇文章"
+other = "共有 {{ . }} 篇文章"
+
+[category.posts]
+other = "篇文章"
+
+[category.more]
+other = "More..."
+
+[category.empty]
+other = "暫無分類"
+
+# 標籤頁
+[tag.title]
+other = "標籤"
+
+[tag.subtitle]
+other = "標籤"
+
+[tag.menu]
+other = "標籤"
+
+[tag.post_total]
+one = "共有 {{ . }} 篇文章"
+other = "共有 {{ . }} 篇文章"
+
+[tag.posts]
+other = "篇文章"
+
+[tag.empty]
+other = "暫無標籤"
+
+# 關於頁
+[about.title]
+other = "關於"
+
+[about.subtitle]
+other = "關於"
+
+[about.menu]
+other = "關於"
+
+# 友鏈頁
+[links.title]
+other = "交換連結"
+
+[links.subtitle]
+other = "交換連結"
+
+[links.menu]
+other = "連結"
+
+# 404 頁面
+[page404.title]
+other = "頁面不存在"
+
+[page404.subtitle]
+other = "頁面不存在"
+
+[page404.menu]
+other = "頁面不存在"
+
+[page404.message]
+other = "您訪問的頁面不存在"
+
+[page404.redirect]
+other = "{{ . }} 秒後自動跳轉到首頁"
+
+[page404.back]
+other = "返回首頁"
+
+[page404.seconds]
+other = "秒"
+
+# 文章相關
+[post.toc]
+other = "目錄"
+
+[post.prev]
+other = "上一篇"
+
+[post.next]
+other = "下一篇"
+
+[post.prev_post]
+other = "上一篇"
+
+[post.next_post]
+other = "下一篇"
+
+[post.updated]
+other = "本文最後更新於：{{ . }}"
+
+[post.words]
+other = "字"
+
+[post.min_read]
+other = "分鐘"
+
+[post.views]
+other = "次"
+
+[post.wordcount]
+other = "{{ . }} 字"
+
+[post.min2read]
+other = "{{ . }} 分鐘"
+
+# 版權聲明
+[copyright.author]
+other = "作者"
+
+[copyright.posted]
+other = "發布於"
+
+[copyright.updated]
+other = "更新於"
+
+[copyright.licensed]
+other = "許可協議"
+
+[copyright.CC]
+other = "CC - 創用 CC 授權"
+
+[copyright.BY]
+other = "BY - 姓名標示"
+
+[copyright.SA]
+other = "SA - 相同方式分享"
+
+[copyright.NC]
+other = "NC - 非商業性"
+
+[copyright.ND]
+other = "ND - 禁止改作"
+
+[copyright.ZERO]
+other = "CC0 - 公眾領域貢獻宣告"
+
+# 頁腳
+[footer.pv]
+other = "總訪問量 {{ . }} 次"
+
+[footer.uv]
+other = "總訪客數 {{ . }} 人"
+
+# 搜尋
+[search.title]
+other = "搜尋"
+
+[search.subtitle]
+other = "搜尋文章"
+
+[search.keyword]
+other = "關鍵字"
+
+[search.hint]
+other = "搜尋任意文章..."
+
+[search.placeholder]
+other = "搜尋文章..."
+
+[search.no_results]
+other = "未找到相關文章"
+
+[search.close]
+other = "關閉"
+
+# 分頁
+[paginator.prev]
+other = "上一頁"
+
+[paginator.next]
+other = "下一頁"
+
+# 列表
+[list.empty]
+other = "暫無內容"
+
+[list.posts]
+other = "篇文章"
+
+# 主題切換
+[theme.toggle]
+other = "切換主題"
+
+[theme.light]
+other = "淺色模式"
+
+[theme.dark]
+other = "深色模式"
+
+[theme.auto]
+other = "跟隨系統"
+
+# 程式碼區塊
+[code.copy]
+other = "複製"
+
+[code.copied]
+other = "已複製"
+
+# 評論
+[post.comments]
+other = "評論"
+
+[comments.loading]
+other = "評論載入中..."
+
+[comments.noscript]
+other = "請啟用 JavaScript 以查看評論"
+
+# 無腳本警告
+[noscript_warning]
+other = "部落格在允許 JavaScript 執行的環境下瀏覽效果更佳"
+
+# 語言切換
+[language.switchTo]
+other = "切換到"
+
+[language.switch]
+other = "切換語言"

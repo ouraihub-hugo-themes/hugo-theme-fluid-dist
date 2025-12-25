@@ -1,0 +1,85 @@
+{{/*
+  Paginator Component - 对标 hexo: layout/_partials/paginator.ejs
+  
+  分页组件，用于文章列表分页导航
+  包含：上一页、页码、下一页
+*/}}
+
+{{ $paginator := . }}
+{{ $scroll_after_turning_page := site.Params.scroll_down_arrow.scroll_after_turning_page | default true }}
+{{ $anchor := cond $scroll_after_turning_page "#board" "" }}
+
+{{ if gt $paginator.TotalPages 1 }}
+<nav aria-label="navigation">
+  <span class="pagination" id="pagination">
+    {{/* 上一页 */}}
+    {{ if $paginator.HasPrev }}
+      <a class="extend prev" rel="prev" href="{{ $paginator.Prev.URL }}{{ $anchor }}">
+        <i class="iconfont icon-arrowleft"></i>
+      </a>
+    {{ end }}
+    
+    {{/* 页码 - 对标 hexo paginator 的 mid_size: 2, end_size: 1 */}}
+    {{ $currentPage := $paginator.PageNumber }}
+    {{ $totalPages := $paginator.TotalPages }}
+    {{ $midSize := 2 }}
+    {{ $endSize := 1 }}
+    
+    {{/* 计算显示范围 */}}
+    {{ $startPage := sub $currentPage $midSize }}
+    {{ $endPage := add $currentPage $midSize }}
+    
+    {{/* 调整边界 */}}
+    {{ if lt $startPage 1 }}
+      {{ $startPage = 1 }}
+    {{ end }}
+    {{ if gt $endPage $totalPages }}
+      {{ $endPage = $totalPages }}
+    {{ end }}
+    
+    {{/* 显示第一页 */}}
+    {{ if gt $startPage $endSize }}
+      {{ range seq 1 $endSize }}
+        {{ with index $paginator.Pagers (sub . 1) }}
+          <a class="page-number" href="{{ .URL }}{{ $anchor }}">{{ .PageNumber }}</a>
+        {{ end }}
+      {{ end }}
+      {{ if gt $startPage (add $endSize 1) }}
+        <span class="space">…</span>
+      {{ end }}
+    {{ end }}
+    
+    {{/* 显示中间页码 */}}
+    {{ range $paginator.Pagers }}
+      {{ $pageNum := .PageNumber }}
+      {{ if and (ge $pageNum $startPage) (le $pageNum $endPage) }}
+        {{ if eq $pageNum $currentPage }}
+          <span class="page-number current">{{ $pageNum }}</span>
+        {{ else }}
+          <a class="page-number" href="{{ .URL }}{{ $anchor }}">{{ $pageNum }}</a>
+        {{ end }}
+      {{ end }}
+    {{ end }}
+    
+    {{/* 显示最后一页 */}}
+    {{ $lastStart := add (sub $totalPages $endSize) 1 }}
+    {{ if lt $endPage $lastStart }}
+      {{ if lt (add $endPage 1) $lastStart }}
+        <span class="space">…</span>
+      {{ end }}
+      {{ range seq $lastStart $totalPages }}
+        {{ with index $paginator.Pagers (sub . 1) }}
+          <a class="page-number" href="{{ .URL }}{{ $anchor }}">{{ .PageNumber }}</a>
+        {{ end }}
+      {{ end }}
+    {{ end }}
+    
+    {{/* 下一页 */}}
+    {{ if $paginator.HasNext }}
+      <a class="extend next" rel="next" href="{{ $paginator.Next.URL }}{{ $anchor }}">
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+    {{ end }}
+  </span>
+</nav>
+{{ end }}

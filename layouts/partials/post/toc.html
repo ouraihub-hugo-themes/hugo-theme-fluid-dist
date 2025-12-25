@@ -1,0 +1,30 @@
+{{/* 
+  Table of Contents - 对标 hexo: layout/_partials/post/toc.ejs
+  
+  使用 Hugo 内置的 .TableOfContents 生成目录
+  支持配置:
+  - post.toc.enable: 是否启用 TOC
+  - post.toc.placement: 放置位置 (left | right)
+  - post.toc.headingSelector: 标题选择器 (h1,h2,h3,h4,h5,h6)
+  - post.toc.collapseDepth: 折叠深度
+  
+  Requirements: 8.1, 8.2, 8.5
+*/}}
+
+{{ $tocEnable := .Site.Params.post.toc.enable | default true }}
+{{ $collapseDepth := .Site.Params.post.toc.collapseDepth | default 0 }}
+
+{{ if and $tocEnable .TableOfContents }}
+<div id="toc" class="sidebar" data-collapse-depth="{{ $collapseDepth }}">
+  {{/* TOC 标题 */}}
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>{{ i18n "post.toc" | default "目录" }}</span>
+  </p>
+  
+  {{/* TOC 内容 - 使用 Hugo 内置的 TableOfContents */}}
+  <div class="toc-body" id="toc-body">
+    {{ .TableOfContents }}
+  </div>
+</div>
+{{ end }}

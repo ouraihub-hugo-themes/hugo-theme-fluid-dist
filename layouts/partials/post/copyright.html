@@ -1,0 +1,89 @@
+{{/* Post Copyright - 对标 hexo: layout/_partials/post/copyright.ejs */}}
+{{/* 版权声明组件 */}}
+
+{{/* 获取许可证类型 */}}
+{{ $license := .Site.Params.post.copyright.license | default "BY" }}
+{{ if .Params.copyright }}
+  {{ if eq (printf "%T" .Params.copyright) "string" }}
+    {{ $license = .Params.copyright }}
+  {{ end }}
+{{ end }}
+{{ if .Params.license }}
+  {{ $license = .Params.license }}
+{{ end }}
+{{ $license = upper $license }}
+
+<div class="license-box my-3">
+  {{/* 标题和链接 */}}
+  <div class="license-title">
+    <div>{{ .Title }}</div>
+    <div>{{ .Permalink }}</div>
+  </div>
+
+  {{/* 元信息 */}}
+  <div class="license-meta">
+    {{/* 作者 */}}
+    {{ if .Site.Params.post.copyright.author.enable | default true }}
+      {{ with .Params.author | default .Site.Params.author }}
+        <div class="license-meta-item">
+          <div>{{ i18n "copyright.author" | default "作者" }}</div>
+          <div>{{ . }}</div>
+        </div>
+      {{ end }}
+    {{ end }}
+
+    {{/* 发布日期 */}}
+    {{ if .Site.Params.post.copyright.post_date.enable | default true }}
+      {{ with .Date }}
+        <div class="license-meta-item license-meta-date">
+          <div>{{ i18n "copyright.posted" | default "发布于" }}</div>
+          <div>{{ .Format ($.Site.Params.post.copyright.post_date.format | default "2006-01-02") }}</div>
+        </div>
+      {{ end }}
+    {{ end }}
+
+    {{/* 更新日期 */}}
+    {{ if .Site.Params.post.copyright.update_date.enable }}
+      {{ $updated := .Lastmod | default .Date }}
+      {{ if ne ($updated.Format "2006-01-02") (.Date.Format "2006-01-02") }}
+        <div class="license-meta-item license-meta-date">
+          <div>{{ i18n "copyright.updated" | default "更新于" }}</div>
+          <div>{{ $updated.Format (.Site.Params.post.copyright.update_date.format | default "2006-01-02") }}</div>
+        </div>
+      {{ end }}
+    {{ end }}
+
+    {{/* 许可协议 */}}
+    {{ if $license }}
+      <div class="license-meta-item">
+        <div>{{ i18n "copyright.licensed" | default "许可协议" }}</div>
+        <div>
+          {{/* CC 许可证图标 */}}
+          {{ $ccLicenses := slice "BY" "BY-SA" "BY-ND" "BY-NC" "BY-NC-SA" "BY-NC-ND" }}
+          {{ if in $ccLicenses $license }}
+            {{ $items := split $license "-" }}
+            {{ range $items }}
+              <a class="print-no-link" target="_blank" rel="nofollow noopener" href="https://creativecommons.org/licenses/{{ lower $license }}/4.0/">
+                <span class="hint--top hint--rounded" aria-label="{{ i18n (printf "copyright.%s" .) | default . }}">
+                  <i class="iconfont icon-cc-{{ lower . }}"></i>
+                </span>
+              </a>
+            {{ end }}
+          {{ else if eq $license "ZERO" }}
+            <a class="print-no-link" target="_blank" rel="nofollow noopener" href="https://creativecommons.org/publicdomain/zero/1.0/">
+              <span class="hint--top hint--rounded" aria-label="{{ i18n "copyright.ZERO" | default "CC0 - 无版权" }}">
+                <i class="iconfont icon-cc-zero"></i>
+              </span>
+            </a>
+          {{ else }}
+            {{/* 自定义许可证文本 */}}
+            {{ $license }}
+          {{ end }}
+        </div>
+      </div>
+    {{ end }}
+  </div>
+
+  {{/* 版权图标背景 */}}
+  <div class="license-icon iconfont"></div>
+</div>

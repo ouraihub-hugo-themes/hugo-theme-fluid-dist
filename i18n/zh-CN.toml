@@ -1,0 +1,285 @@
+# Hugo Theme Fluid - 简体中文翻译
+# 对应 hexo-theme-fluid/languages/zh-CN.yml
+
+[name]
+other = "简体中文"
+
+# 导航菜单
+[nav.home]
+other = "首页"
+
+[nav.archive]
+other = "归档"
+
+[nav.category]
+other = "分类"
+
+[nav.tag]
+other = "标签"
+
+[nav.about]
+other = "关于"
+
+[nav.links]
+other = "友链"
+
+[nav.toggle]
+other = "切换导航"
+
+# 首页
+[home.title]
+other = "首页"
+
+[home.menu]
+other = "首页"
+
+# 归档页
+[archive.title]
+other = "归档"
+
+[archive.subtitle]
+other = "归档"
+
+[archive.menu]
+other = "归档"
+
+[archive.post_total]
+one = "共计 {{ . }} 篇文章"
+other = "共计 {{ . }} 篇文章"
+
+[archive.empty]
+other = "暂无文章"
+
+# 分类页
+[category.title]
+other = "分类"
+
+[category.subtitle]
+other = "分类"
+
+[category.menu]
+other = "分类"
+
+[category.post_total]
+one = "共计 {{ . }} 篇文章"
+other = "共计 {{ . }} 篇文章"
+
+[category.posts]
+other = "篇文章"
+
+[category.more]
+other = "More..."
+
+[category.empty]
+other = "暂无分类"
+
+# 标签页
+[tag.title]
+other = "标签"
+
+[tag.subtitle]
+other = "标签"
+
+[tag.menu]
+other = "标签"
+
+[tag.post_total]
+one = "共计 {{ . }} 篇文章"
+other = "共计 {{ . }} 篇文章"
+
+[tag.posts]
+other = "篇文章"
+
+[tag.empty]
+other = "暂无标签"
+
+# 关于页
+[about.title]
+other = "关于"
+
+[about.subtitle]
+other = "关于"
+
+[about.menu]
+other = "关于"
+
+# 友链页
+[links.title]
+other = "友链"
+
+[links.subtitle]
+other = "友情链接"
+
+[links.menu]
+other = "友链"
+
+# 404 页面
+[page404.title]
+other = "页面不存在"
+
+[page404.subtitle]
+other = "页面不存在"
+
+[page404.menu]
+other = "页面不存在"
+
+[page404.message]
+other = "您访问的页面不存在"
+
+[page404.redirect]
+other = "{{ . }} 秒后自动跳转到首页"
+
+[page404.back]
+other = "返回首页"
+
+[page404.seconds]
+other = "秒"
+
+# 文章相关
+[post.toc]
+other = "目录"
+
+[post.prev]
+other = "上一篇"
+
+[post.next]
+other = "下一篇"
+
+[post.prev_post]
+other = "上一篇"
+
+[post.next_post]
+other = "下一篇"
+
+[post.updated]
+other = "本文最后更新于 {{ . }}"
+
+[post.words]
+other = "字"
+
+[post.min_read]
+other = "分钟"
+
+[post.views]
+other = "次"
+
+[post.wordcount]
+other = "{{ . }} 字"
+
+[post.min2read]
+other = "{{ . }} 分钟"
+
+# 版权声明
+[copyright.author]
+other = "作者"
+
+[copyright.posted]
+other = "发布于"
+
+[copyright.updated]
+other = "更新于"
+
+[copyright.licensed]
+other = "许可协议"
+
+[copyright.CC]
+other = "CC - 知识共享许可协议"
+
+[copyright.BY]
+other = "BY - 署名"
+
+[copyright.SA]
+other = "SA - 相同方式共享"
+
+[copyright.NC]
+other = "NC - 非商业性使用"
+
+[copyright.ND]
+other = "ND - 禁止演绎"
+
+[copyright.ZERO]
+other = "CC0 - 无版权"
+
+# 页脚
+[footer.pv]
+other = "总访问量 {{ . }} 次"
+
+[footer.uv]
+other = "总访客数 {{ . }} 人"
+
+# 搜索
+[search.title]
+other = "搜索"
+
+[search.subtitle]
+other = "搜索文章"
+
+[search.keyword]
+other = "关键词"
+
+[search.hint]
+other = "搜索任意文章..."
+
+[search.placeholder]
+other = "搜索文章..."
+
+[search.no_results]
+other = "未找到相关文章"
+
+[search.close]
+other = "关闭"
+
+# 分页
+[paginator.prev]
+other = "上一页"
+
+[paginator.next]
+other = "下一页"
+
+# 列表
+[list.empty]
+other = "暂无内容"
+
+[list.posts]
+other = "篇文章"
+
+# 主题切换
+[theme.toggle]
+other = "切换主题"
+
+[theme.light]
+other = "浅色模式"
+
+[theme.dark]
+other = "深色模式"
+
+[theme.auto]
+other = "跟随系统"
+
+# 代码块
+[code.copy]
+other = "复制"
+
+[code.copied]
+other = "已复制"
+
+# 评论
+[post.comments]
+other = "评论"
+
+[comments.loading]
+other = "评论加载中..."
+
+[comments.noscript]
+other = "请启用 JavaScript 以查看评论"
+
+# 无脚本警告
+[noscript_warning]
+other = "博客在允许 JavaScript 运行的环境下浏览效果更佳"
+
+# 语言切换
+[language.switchTo]
+other = "切换到"
+
+[language.switch]
+other = "切换语言"

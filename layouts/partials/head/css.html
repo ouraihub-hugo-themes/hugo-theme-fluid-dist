@@ -1,0 +1,11 @@
+{{/* CSS 资源加载 */}}
+{{/* 主样式文件 */}}
+<link rel="stylesheet" href="{{ "css/main.css" | relURL }}">
+
+{{/* iconfont 图标库 */}}
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+{{/* 自定义 CSS */}}
+{{ range .Site.Params.custom_css }}
+<link rel="stylesheet" href="{{ . | relURL }}">
+{{ end }}

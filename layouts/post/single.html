@@ -1,0 +1,93 @@
+{{- define "main" -}}
+{{/* 文章详情页 - 对标 hexo: layout/post.ejs */}}
+
+{{/* Markdown Plugins - Fancybox 图片放大 */}}
+{{ if and (.Site.Params.post.image_zoom.enable | default true) (ne .Params.image_zoom false) }}
+  {{ partial "plugins/fancybox.html" . }}
+{{ end }}
+
+{{/* Math 数学公式支持 */}}
+{{ partial "plugins/math.html" . }}
+
+{{/* Mermaid 流程图支持 */}}
+{{ partial "plugins/mermaid.html" . }}
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    {{/* 左侧边栏 - 分类导航（可选） */}}
+    <div class="side-col d-none d-lg-block col-lg-2">
+      {{/* 左侧可以放广告或其他内容，hexo-fluid 这里是 inject_point */}}
+    </div>
+
+    {{/* 中间内容区 */}}
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            {{/* 文章标题（SEO 用） - 支持 subtitle 覆盖 */}}
+            <h1 id="seo-header">{{ .Params.subtitle | default .Title }}</h1>
+
+            {{/* 更新提示 - 对标 hexo post.updated */}}
+            {{ if .Site.Params.post.updated.enable }}
+              {{ $updated := .Lastmod | default .Date }}
+              {{ if ne ($updated.Format "2006-01-02") (.Date.Format "2006-01-02") }}
+                {{ $noteClass := .Site.Params.post.updated.note_class | default "info" }}
+                <p id="updated-time" class="note note-{{ $noteClass }}">
+                  {{ if .Site.Params.post.updated.relative }}
+                    {{ i18n "post.updated" ($updated.Format "2006-01-02T15:04:05Z07:00") }}
+                  {{ else }}
+                    {{ $format := .Site.Params.post.updated.date_format | default "2006-01-02" }}
+                    {{ i18n "post.updated" ($updated.Format $format) }}
+                  {{ end }}
+                </p>
+              {{ end }}
+            {{ end }}
+
+            {{/* 文章元信息 - 顶部 */}}
+            {{ partial "post/meta-top.html" . }}
+
+            {{/* 文章摘要引用框 */}}
+            {{ if .Description }}
+              <blockquote class="post-description">{{ .Description }}</blockquote>
+            {{ end }}
+
+            {{/* 文章内容 */}}
+            <div class="markdown-body">
+              {{ .Content }}
+            </div>
+
+            <hr />
+
+            {{/* 底部元信息 - 分类和标签 */}}
+            {{ partial "post/meta-bottom.html" . }}
+
+            {{/* 版权声明 */}}
+            {{ if and (.Site.Params.post.copyright.enable | default true) (ne .Params.copyright false) }}
+              {{ partial "post/copyright.html" . }}
+            {{ end }}
+
+            {{/* 上一篇/下一篇导航 */}}
+            {{ if and (.Site.Params.post.prev_next.enable | default true) (ne .Params.hide true) }}
+              {{ partial "post/prev-next.html" . }}
+            {{ end }}
+
+            {{/* 评论区 */}}
+            {{ if and (.Site.Params.post.comments.enable | default false) (ne .Params.comments false) }}
+              <div id="comments" class="mt-8">
+                {{ partial "comments/comments.html" . }}
+              </div>
+            {{ end }}
+          </article>
+        </div>
+      </div>
+    </div>
+
+    {{/* 右侧边栏 - 目录 */}}
+    <div class="side-col d-none d-lg-block col-lg-2">
+      {{ if and (.Site.Params.post.toc.enable | default true) (ne .Params.toc false) }}
+        {{ partial "post/toc.html" . }}
+      {{ end }}
+    </div>
+  </div>
+</div>
+{{- end -}}

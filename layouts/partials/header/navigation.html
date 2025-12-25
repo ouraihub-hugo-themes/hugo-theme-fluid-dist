@@ -1,0 +1,109 @@
+{{/* Navigation Bar - 参考 hexo: layout/_partials/header/navigation.ejs */}}
+{{ $ground_glass := .Site.Params.navbar.ground_glass }}
+
+<nav id="navbar" class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    {{/* Site Title / Logo */}}
+    <a class="navbar-brand" href="{{ .Site.BaseURL | relLangURL }}">
+      <strong>{{ .Site.Params.navbar.blog_title | default .Site.Title }}</strong>
+    </a>
+
+    {{/* Mobile Toggle Button */}}
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" 
+            data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" 
+            aria-label="{{ i18n "nav.toggle" | default "Toggle navigation" }}">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    {{/* Collapsible Menu */}}
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        {{/* Menu Items from config */}}
+        {{ range .Site.Menus.main }}
+          {{ $text := .Name }}
+          {{ $hasChildren := .HasChildren }}
+          
+          {{ if $hasChildren }}
+            {{/* Dropdown Menu - 桌面端悬浮显示，移动端点击展开 */}}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" 
+                 role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{ with .Pre }}<i class="{{ . }}"></i>{{ end }}
+                <span>{{ $text }}</span>
+                <i class="iconfont icon-arrow-down dropdown-arrow"></i>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                {{ range .Children }}
+                  {{ $target := .Post | default (.Params.post | default "_self") }}
+                  <a class="dropdown-item" href="{{ .URL | relLangURL }}" 
+                     target="{{ $target }}">
+                    {{ with .Pre }}<i class="{{ . }}"></i>{{ end }}
+                    <span>{{ .Name }}</span>
+                  </a>
+                {{ end }}
+              </div>
+            </li>
+          {{ else }}
+            {{/* Regular Menu Item */}}
+            {{ $target := .Post | default (.Params.post | default "_self") }}
+            <li class="nav-item">
+              <a class="nav-link" href="{{ .URL | relLangURL }}" 
+                 target="{{ $target }}">
+                {{ with .Pre }}<i class="{{ . }}"></i>{{ end }}
+                <span>{{ $text }}</span>
+              </a>
+            </li>
+          {{ end }}
+        {{ end }}
+
+        {{/* Search Button - 打开搜索模态框 */}}
+        {{ if .Site.Params.search.enable | default true }}
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" 
+               data-toggle="modal" data-target="#modalSearch"
+               aria-label="{{ i18n "search.title" | default "Search" }}">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+        {{ end }}
+
+        {{/* Language Switcher - 语言切换按钮 */}}
+        {{- if hugo.IsMultilingual -}}
+          <li class="nav-item" id="language-switch-btn">
+            {{ partial "language-switcher.html" . }}
+          </li>
+        {{- end -}}
+
+        {{/* Dark Mode Toggle */}}
+        {{ if .Site.Params.dark_mode.enable | default true }}
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" 
+               aria-label="{{ i18n "theme.toggle" | default "Toggle theme" }}">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        {{ end }}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+{{/* Ground Glass Effect CSS */}}
+{{ if and $ground_glass $ground_glass.enable }}
+<style>
+  /* 毛玻璃效果 - 滚动后和移动端展开时 */
+  .navbar .dropdown-collapse,
+  .top-nav-collapse,
+  .navbar-col-show {
+    backdrop-filter: blur({{ $ground_glass.px | default 3 }}px);
+    -webkit-backdrop-filter: blur({{ $ground_glass.px | default 3 }}px);
+    background-color: rgba(47, 65, 84, {{ $ground_glass.alpha | default 0.7 }});
+  }
+  [data-user-color-scheme="dark"] .navbar .dropdown-collapse,
+  [data-user-color-scheme="dark"] .top-nav-collapse,
+  [data-user-color-scheme="dark"] .navbar-col-show {
+    background-color: rgba(31, 49, 68, {{ $ground_glass.alpha | default 0.7 }});
+  }
+</style>
+{{ end }}

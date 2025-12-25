@@ -1,0 +1,97 @@
+{{/* SEO Meta Tags */}}
+
+{{/* Description */}}
+{{ $description := .Description | default .Summary | default .Site.Params.description | truncate 160 }}
+<meta name="description" content="{{ $description }}" />
+
+{{/* Keywords */}}
+{{ with .Keywords }}
+  <meta name="keywords" content="{{ delimit . ", " }}" />
+{{ else }}
+  {{ with .Params.tags }}
+    <meta name="keywords" content="{{ delimit . ", " }}" />
+  {{ end }}
+{{ end }}
+
+{{/* Author */}}
+{{ with .Params.author | default .Site.Params.author }}
+  <meta name="author" content="{{ . }}" />
+{{ end }}
+
+{{/* Canonical URL */}}
+<link rel="canonical" href="{{ .Permalink }}" />
+
+{{/* Open Graph */}}
+<meta property="og:title" content="{{ .Title }}" />
+<meta property="og:description" content="{{ $description }}" />
+<meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}" />
+<meta property="og:url" content="{{ .Permalink }}" />
+<meta property="og:site_name" content="{{ .Site.Title }}" />
+{{ with .Params.image | default .Site.Params.og_image }}
+  <meta property="og:image" content="{{ . | absURL }}" />
+{{ end }}
+{{ if .IsPage }}
+  <meta property="article:published_time" content="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}" />
+  {{ with .Lastmod }}
+    <meta property="article:modified_time" content="{{ .Format "2006-01-02T15:04:05Z07:00" }}" />
+  {{ end }}
+  {{ with .Params.author | default .Site.Params.author }}
+    <meta property="article:author" content="{{ . }}" />
+  {{ end }}
+  {{ range .Params.tags }}
+    <meta property="article:tag" content="{{ . }}" />
+  {{ end }}
+{{ end }}
+
+{{/* Twitter Card */}}
+<meta name="twitter:card" content="{{ .Site.Params.open_graph.twitter_card | default "summary_large_image" }}" />
+<meta name="twitter:title" content="{{ .Title }}" />
+<meta name="twitter:description" content="{{ $description }}" />
+{{ with .Params.image | default .Site.Params.og_image }}
+  <meta name="twitter:image" content="{{ . | absURL }}" />
+{{ end }}
+{{ with .Site.Params.open_graph.twitter_site }}
+  <meta name="twitter:site" content="@{{ . }}" />
+{{ end }}
+{{ with .Site.Params.open_graph.twitter_id }}
+  <meta name="twitter:creator" content="@{{ . }}" />
+{{ end }}
+
+{{/* JSON-LD Schema */}}
+{{ if .IsPage }}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "{{ .Title }}",
+    "description": "{{ $description }}",
+    "datePublished": "{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}",
+    {{ with .Lastmod }}"dateModified": "{{ .Format "2006-01-02T15:04:05Z07:00" }}",{{ end }}
+    "author": {
+      "@type": "Person",
+      "name": "{{ .Params.author | default .Site.Params.author }}"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "{{ .Site.Title }}"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "{{ .Permalink }}"
+    }
+    {{ with .Params.image | default .Site.Params.og_image }}
+    ,"image": "{{ . | absURL }}"
+    {{ end }}
+  }
+  </script>
+{{ else if .IsHome }}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "{{ .Site.Title }}",
+    "url": "{{ .Site.BaseURL }}",
+    "description": "{{ .Site.Params.description }}"
+  }
+  </script>
+{{ end }}

@@ -1,0 +1,60 @@
+{{ define "main" }}
+{{/* Banner */}}
+{{ $banner_img := .Params.banner_img | default .Site.Params.post.banner_img | default "/img/default.png" }}
+{{ $banner_height := .Params.banner_img_height | default .Site.Params.post.banner_img_height | default 70 }}
+{{ $banner_mask := .Params.banner_mask_alpha | default .Site.Params.post.banner_mask_alpha | default 0.3 }}
+{{ partial "header/banner.html" (dict "context" . "banner_img" $banner_img "banner_img_height" $banner_height "banner_mask_alpha" $banner_mask "title" .Title "subtitle" "" "show_scroll_down" false) }}
+
+{{/* Markdown Plugins - Fancybox 图片放大 */}}
+{{ if and (.Site.Params.post.image_zoom.enable | default true) (ne .Params.image_zoom false) }}
+  {{ partial "plugins/fancybox.html" . }}
+{{ end }}
+
+{{/* AnchorJS 锚点链接 */}}
+{{ if .Site.Params.fun_features.anchorjs.enable | default true }}
+  {{ partial "plugins/anchorjs.html" . }}
+{{ end }}
+
+{{/* Math 数学公式支持 */}}
+{{ partial "plugins/math.html" . }}
+
+{{/* Main Content */}}
+<div class="container mx-auto px-4 py-8 -mt-16 relative z-10">
+  <div class="flex flex-col lg:flex-row gap-8">
+    {{/* Left Sidebar - Category Bar */}} {{ if and (.Site.Params.post.category_bar.enable | default
+    true) (eq (.Site.Params.post.category_bar.placement | default "left") "left") }} {{ if or (not
+    (.Site.Params.post.category_bar.specific | default true)) (.Params.category_bar) }}
+    <aside class="hidden lg:block w-64 shrink-0" data-pagefind-ignore>
+      {{ partial "post/category-bar.html" . }}
+    </aside>
+    {{ end }} {{ end }} {{/* Main Content - Pagefind 索引区域 */}}
+    <article class="flex-1 min-w-0" data-pagefind-body>
+      <div class="board p-6 md:p-8">
+        {{/* Post Meta Top */}} {{ partial "post/meta-top.html" . }} {{/* Post Content */}}
+        <div class="post-content prose prose-lg max-w-none mt-8">{{ .Content }}</div>
+
+        {{/* Post Meta Bottom - 不索引 */}}
+        <div data-pagefind-ignore>
+          {{ partial "post/meta-bottom.html" . }} {{/* Copyright */}} {{ if
+          .Site.Params.post.copyright.enable | default true }} {{ partial "post/copyright.html" . }}
+          {{ end }} {{/* Prev/Next Navigation */}} {{ if .Site.Params.post.prev_next.enable | default
+          true }} {{ partial "post/prev-next.html" . }} {{ end }} {{/* Comments */}} {{ if
+          .Site.Params.post.comments.enable }} {{ partial "comments/comments.html" . }} {{ end }}
+        </div>
+      </div>
+    </article>
+
+    {{/* Right Sidebar - TOC */}} {{ if .Site.Params.post.toc.enable | default true }} {{ if eq
+    (.Site.Params.post.toc.placement | default "right") "right" }}
+    <aside class="hidden xl:block w-64 shrink-0" data-pagefind-ignore>{{ partial "post/toc.html" . }}</aside>
+    {{ end }} {{ end }} {{/* Right Sidebar - Category Bar (if placement is right) */}} {{ if and
+    (.Site.Params.post.category_bar.enable | default true) (eq
+    (.Site.Params.post.category_bar.placement | default "left") "right") }} {{ if or (not
+    (.Site.Params.post.category_bar.specific | default true)) (.Params.category_bar) }}
+    <aside class="hidden lg:block w-64 shrink-0" data-pagefind-ignore>
+      {{ partial "post/category-bar.html" . }}
+    </aside>
+    {{ end }} {{ end }}
+  </div>
+</div>
+{{ end }}

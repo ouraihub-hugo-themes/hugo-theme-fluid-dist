@@ -1,0 +1,8 @@
+{{/* JavaScript 资源加载 */}}
+{{/* 主脚本文件 */}}
+<script src="{{ "js/main.js" | relURL }}" defer></script>
+
+{{/* 自定义 JS */}}
+{{ range .Site.Params.custom_js }}
+<script src="{{ . | relURL }}" defer></script>
+{{ end }}

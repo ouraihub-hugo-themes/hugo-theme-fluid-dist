@@ -1,0 +1,136 @@
+{{/* 打字机效果 - 参考: hexo: layout/_partials/plugins/typed.ejs */}}
+{{/* 检查是否启用打字机效果 */}}
+{{ $typing := .Site.Params.fun_features.typing }}
+{{ if $typing.enable | default true }}
+
+{{/* 检查 scope 配置 */}}
+{{ $scope := $typing.scope | default slice }}
+{{ $in_scope := true }}
+
+{{ if gt (len $scope) 0 }}
+  {{ $in_scope = false }}
+  {{ $page_type := "home" }}
+  
+  {{/* 判断当前页面类型 - 对应 hexo-theme-fluid 的 scope 配置 */}}
+  {{ if .IsPage }}
+    {{ if eq .Type "post" }}
+      {{ $page_type = "post" }}
+    {{ else if eq .Type "about" }}
+      {{ $page_type = "about" }}
+    {{ else if eq .Type "links" }}
+      {{ $page_type = "links" }}
+    {{ else }}
+      {{ $page_type = "page" }}
+    {{ end }}
+  {{ else if eq .Kind "taxonomy" }}
+    {{ if eq .Data.Singular "category" }}
+      {{ $page_type = "category" }}
+    {{ else if eq .Data.Singular "tag" }}
+      {{ $page_type = "tag" }}
+    {{ end }}
+  {{ else if eq .Kind "section" }}
+    {{ if eq .Section "archives" }}
+      {{ $page_type = "archive" }}
+    {{ end }}
+  {{ else if eq .Kind "404" }}
+    {{ $page_type = "404" }}
+  {{ end }}
+  
+  {{/* 检查当前页面是否在 scope 中 */}}
+  {{ range $scope }}
+    {{ if eq . $page_type }}
+      {{ $in_scope = true }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+
+{{/* 检查页面是否禁用了 subtitle */}}
+{{ $subtitle_enabled := true }}
+{{ if isset .Params "subtitle" }}
+  {{ if eq .Params.subtitle false }}
+    {{ $subtitle_enabled = false }}
+  {{ end }}
+{{ end }}
+
+{{ if and $in_scope $subtitle_enabled }}
+{{/* 加载 typed.js 库 */}}
+<script src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js"></script>
+<script>
+(function(window, document) {
+  'use strict';
+  
+  // 打字机效果配置
+  var CONFIG = {
+    typeSpeed: {{ $typing.typeSpeed | default 70 }},
+    cursorChar: '{{ $typing.cursorChar | default "_" }}',
+    loop: {{ $typing.loop | default false }}
+  };
+  
+  // 打字机效果函数
+  function typing(text) {
+    if (typeof Typed === 'undefined') {
+      console.warn('Typed.js not loaded');
+      return;
+    }
+    
+    // 先清空 subtitle 内容
+    var subtitle = document.getElementById('subtitle');
+    if (subtitle) {
+      subtitle.innerText = '';
+    }
+    
+    // 创建 Typed 实例
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',  // 先显示空格，然后删除
+        text
+      ],
+      cursorChar: CONFIG.cursorChar,
+      typeSpeed: CONFIG.typeSpeed,
+      loop: CONFIG.loop,
+      startDelay: 300  // 延迟 300ms 开始打字
+    });
+  }
+  
+  // 初始化
+  function init() {
+    var subtitle = document.getElementById('subtitle');
+    if (!subtitle) {
+      return;
+    }
+    
+    var text = subtitle.getAttribute('data-typed-text');
+    if (!text) {
+      return;
+    }
+    
+    {{ if .IsHome }}
+    {{/* 首页：支持 slogan 列表配置 */}}
+    {{ $slogan := .Site.Params.index.slogan }}
+    {{ if and $slogan.enable (reflect.IsSlice $slogan.text) }}
+    {{/* 如果 slogan.text 是数组，随机选择一条 */}}
+    var texts = {{ $slogan.text | jsonify | safeJS }};
+    if (texts && texts.length > 0) {
+      var idx = Math.floor(Math.random() * texts.length);
+      typing(texts[idx]);
+    } else {
+      typing(text);
+    }
+    {{ else }}
+    typing(text);
+    {{ end }}
+    {{ else }}
+    typing(text);
+    {{ end }}
+  }
+  
+  // 页面加载完成后执行初始化
+  if (document.readyState === 'complete') {
+    init();
+  } else {
+    window.addEventListener('load', init);
+  }
+})(window, document);
+</script>
+{{ end }}
+{{ end }}

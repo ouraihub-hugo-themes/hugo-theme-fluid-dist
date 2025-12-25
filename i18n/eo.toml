@@ -1,0 +1,282 @@
+# Hugo Theme Fluid - Esperanto Traduko
+# Based on hexo-theme-fluid/languages/eo.yml
+
+[name]
+other = "Esperanto"
+
+# Navigado
+[nav.home]
+other = "Hejmpaĝo"
+
+[nav.archive]
+other = "Arkivoj"
+
+[nav.category]
+other = "Kategorio"
+
+[nav.tag]
+other = "Etikedoj"
+
+[nav.about]
+other = "Pri"
+
+[nav.links]
+other = "Ligoj"
+
+[nav.toggle]
+other = "Ŝanĝi navigadon"
+
+# Hejmpaĝo
+[home.title]
+other = "Hejmpaĝo"
+
+[home.menu]
+other = "Hejmpaĝo"
+
+# Arkivoj
+[archive.title]
+other = "Arkivoj"
+
+[archive.subtitle]
+other = "Arkivoj"
+
+[archive.menu]
+other = "Arkivoj"
+
+[archive.post_total]
+one = "Entute {{ . }} afiŝo"
+other = "Entute {{ . }} afiŝoj"
+
+[archive.empty]
+other = "Neniuj afiŝoj trovitaj"
+
+# Kategorio
+[category.title]
+other = "Kategorio"
+
+[category.subtitle]
+other = "Kategorio"
+
+[category.menu]
+other = "Kategorio"
+
+[category.post_total]
+one = "Entute {{ . }} afiŝo"
+other = "Entute {{ . }} afiŝoj"
+
+[category.posts]
+other = "afiŝoj"
+
+[category.more]
+other = "More..."
+
+[category.empty]
+other = "Neniuj kategorioj trovitaj"
+
+# Etikedoj
+[tag.title]
+other = "Etikedoj"
+
+[tag.subtitle]
+other = "Etikedoj"
+
+[tag.menu]
+other = "Etikedoj"
+
+[tag.post_total]
+one = "Entute {{ . }} afiŝo"
+other = "Entute {{ . }} afiŝoj"
+
+[tag.posts]
+other = "afiŝoj"
+
+[tag.empty]
+other = "Neniuj etikedoj trovitaj"
+
+# Pri
+[about.title]
+other = "Pri"
+
+[about.subtitle]
+other = "Pri"
+
+[about.menu]
+other = "Pri"
+
+# Ligoj
+[links.title]
+other = "Ligoj"
+
+[links.subtitle]
+other = "Ligoj"
+
+[links.menu]
+other = "Ligoj"
+
+# 404 Paĝo
+[page404.title]
+other = "Paĝo ne trovita"
+
+[page404.subtitle]
+other = "Paĝo ne trovita"
+
+[page404.menu]
+other = "Paĝo ne trovita"
+
+[page404.message]
+other = "La paĝo kiun vi serĉas ne ekzistas"
+
+[page404.redirect]
+other = "Alidirektado al hejmpaĝo post {{ . }} sekundoj"
+
+[page404.back]
+other = "Reen al hejmpaĝo"
+
+[page404.seconds]
+other = "sekundoj"
+
+# Afiŝo
+[post.toc]
+other = "Enhavtabelo"
+
+[post.prev]
+other = "Antaŭa afiŝo"
+
+[post.next]
+other = "Sekva afiŝo"
+
+[post.prev_post]
+other = "Antaŭa afiŝo"
+
+[post.next_post]
+other = "Sekva afiŝo"
+
+[post.updated]
+other = "Aktualizita: {{ . }}"
+
+[post.words]
+other = "vortoj"
+
+[post.min_read]
+other = "minutoj"
+
+[post.views]
+other = "rigardoj"
+
+[post.wordcount]
+other = "{{ . }} vortoj"
+
+[post.min2read]
+other = "{{ . }} minutoj"
+
+# Kopirajto
+[copyright.author]
+other = "Aŭtoro"
+
+[copyright.posted]
+other = "Postigita"
+
+[copyright.updated]
+other = "Aktualizita"
+
+[copyright.licensed]
+other = "Licencita"
+
+[copyright.CC]
+other = "CC - Creative Commons license"
+
+[copyright.BY]
+other = "BY - Attribution"
+
+[copyright.SA]
+other = "SA - Share-alike"
+
+[copyright.NC]
+other = "NC - Non-commercial"
+
+[copyright.ND]
+other = "ND - No derivative works"
+
+[copyright.ZERO]
+other = "CC0 - No Copyright"
+
+# Piedpaĝo
+[footer.pv]
+other = "Vidoj: {{ . }}"
+
+[footer.uv]
+other = "Vizitoj: {{ . }}"
+
+# Serĉo
+[search.title]
+other = "Serĉi"
+
+[search.subtitle]
+other = "Serĉi artikolojn"
+
+[search.keyword]
+other = "Ŝlosilvorto"
+
+[search.hint]
+other = "Serĉi iun ajn artikolon..."
+
+[search.placeholder]
+other = "Serĉi..."
+
+[search.no_results]
+other = "Neniuj rezultoj trovitaj"
+
+[search.close]
+other = "Fermi"
+
+# Paĝnumerado
+[paginator.prev]
+other = "Antaŭa"
+
+[paginator.next]
+other = "Sekva"
+
+# Listo
+[list.empty]
+other = "Neniu enhavo trovita"
+
+[list.posts]
+other = "afiŝoj"
+
+# Temo ŝanĝo
+[theme.toggle]
+other = "Ŝanĝi temon"
+
+[theme.light]
+other = "Hela reĝimo"
+
+[theme.dark]
+other = "Malhela reĝimo"
+
+[theme.auto]
+other = "Aŭtomata"
+
+# Kodbloko
+[code.copy]
+other = "Kopii"
+
+[code.copied]
+other = "Kopiita"
+
+# Komentoj
+[post.comments]
+other = "Komentoj"
+
+[comments.loading]
+other = "Ŝargante komentojn..."
+
+[comments.noscript]
+other = "Bonvolu ebligi JavaScript por vidi komentojn"
+
+# Averto sen skripto
+[noscript_warning]
+other = "Blogo funkcias plej bone kun JavaScript ebligita"
+
+# Lingvo ŝanĝo
+[language.switchTo]
+other = "Ŝanĝi al"
