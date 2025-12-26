@@ -55,8 +55,31 @@
         // 初始化 Pagefind UI
         new PagefindUI({
           element: '#pagefind-search',
+          baseUrl: window.location.origin,
+          bundlePath: '/pagefind/',
           showSubResults: true,
           showImages: false,
+          excerptLength: 30,
+          resetStyles: false,
+          showEmptyFilters: false,
+          processResult: function(result) {
+            // 不修改 URL，保持 Pagefind 原始的 URL 结构
+            // 这样可以确保搜索结果页面和直接访问页面的样式一致
+            return result;
+          },
+          translations: {
+            placeholder: "{{ i18n "search.placeholder" | default "搜索文章..." }}",
+            clear_search: "{{ i18n "search.clear" | default "清除" }}",
+            load_more: "{{ i18n "search.load_more" | default "加载更多" }}",
+            search_label: "{{ i18n "search.label" | default "搜索" }}",
+            filters_label: "{{ i18n "search.filters" | default "筛选" }}",
+            zero_results: "{{ i18n "search.no_results" | default "没有找到相关结果" }}",
+            many_results: "{{ i18n "search.many_results" | default "找到 [SEARCH_TERM] 的 [COUNT] 个结果" }}",
+            one_result: "{{ i18n "search.one_result" | default "找到 [SEARCH_TERM] 的 [COUNT] 个结果" }}",
+            alt_search: "{{ i18n "search.alt_search" | default "没有找到 [SEARCH_TERM] 的结果。显示 [DIFFERENT_TERM] 的结果" }}",
+            search_suggestion: "{{ i18n "search.suggestion" | default "试试搜索" }}",
+            searching: "{{ i18n "search.searching" | default "搜索中..." }}"
+          }
         });
         
         pagefindInitialized = true;
@@ -175,10 +198,33 @@
   /* 搜索结果标题链接 */
   #modalSearch .pagefind-ui__result-title a {
     color: var(--link-color, #0366d6);
+    text-decoration: none;
   }
 
   #modalSearch .pagefind-ui__result-title a:hover {
     color: var(--link-hover-color, #30a9de);
+    text-decoration: underline;
+  }
+
+  /* 确保搜索结果链接可以正常点击 */
+  #modalSearch .pagefind-ui__result-link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  #modalSearch .pagefind-ui__result-link:hover {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* 修复搜索结果点击区域 */
+  #modalSearch .pagefind-ui__result {
+    cursor: pointer;
+  }
+
+  #modalSearch .pagefind-ui__result:hover {
+    background-color: var(--board-bg-color-hover, rgba(0,0,0,0.05));
   }
 
   /* 搜索高亮 */

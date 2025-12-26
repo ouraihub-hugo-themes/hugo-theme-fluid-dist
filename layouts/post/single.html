@@ -51,8 +51,8 @@
               <blockquote class="post-description">{{ .Description }}</blockquote>
             {{ end }}
 
-            {{/* 文章内容 */}}
-            <div class="markdown-body">
+            {{/* 文章内容 - Pagefind 索引区域 */}}
+            <div class="markdown-body" data-pagefind-body>
               {{ .Content }}
             </div>
 
