@@ -53,6 +53,20 @@
         }
         
         // 初始化 Pagefind UI
+        var translations = {
+          placeholder: {{ i18n "search.placeholder" | default "搜索文章..." | jsonify }},
+          clear_search: {{ i18n "search.clear" | default "清除" | jsonify }},
+          load_more: {{ i18n "search.load_more" | default "加载更多" | jsonify }},
+          search_label: {{ i18n "search.label" | default "搜索" | jsonify }},
+          filters_label: {{ i18n "search.filters" | default "筛选" | jsonify }},
+          zero_results: {{ i18n "search.no_results" | default "没有找到相关结果" | jsonify }},
+          many_results: {{ i18n "search.many_results" | default "找到 [SEARCH_TERM] 的 [COUNT] 个结果" | jsonify }},
+          one_result: {{ i18n "search.one_result" | default "找到 [SEARCH_TERM] 的 [COUNT] 个结果" | jsonify }},
+          alt_search: {{ i18n "search.alt_search" | default "没有找到 [SEARCH_TERM] 的结果。显示 [DIFFERENT_TERM] 的结果" | jsonify }},
+          search_suggestion: {{ i18n "search.suggestion" | default "试试搜索" | jsonify }},
+          searching: {{ i18n "search.searching" | default "搜索中..." | jsonify }}
+        };
+        
         new PagefindUI({
           element: '#pagefind-search',
           baseUrl: window.location.origin,
@@ -67,19 +81,7 @@
             // 这样可以确保搜索结果页面和直接访问页面的样式一致
             return result;
           },
-          translations: {
-            placeholder: "{{ i18n "search.placeholder" | default "搜索文章..." }}",
-            clear_search: "{{ i18n "search.clear" | default "清除" }}",
-            load_more: "{{ i18n "search.load_more" | default "加载更多" }}",
-            search_label: "{{ i18n "search.label" | default "搜索" }}",
-            filters_label: "{{ i18n "search.filters" | default "筛选" }}",
-            zero_results: "{{ i18n "search.no_results" | default "没有找到相关结果" }}",
-            many_results: "{{ i18n "search.many_results" | default "找到 [SEARCH_TERM] 的 [COUNT] 个结果" }}",
-            one_result: "{{ i18n "search.one_result" | default "找到 [SEARCH_TERM] 的 [COUNT] 个结果" }}",
-            alt_search: "{{ i18n "search.alt_search" | default "没有找到 [SEARCH_TERM] 的结果。显示 [DIFFERENT_TERM] 的结果" }}",
-            search_suggestion: "{{ i18n "search.suggestion" | default "试试搜索" }}",
-            searching: "{{ i18n "search.searching" | default "搜索中..." }}"
-          }
+          translations: translations
         });
         
         pagefindInitialized = true;

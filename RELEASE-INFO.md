@@ -1,7 +1,7 @@
 # Hugo Fluid Theme - Release Package
 
-**Version**: 1.0.1
-**Release Date**: 2025-12-26 01:20:25
+**Version**: 1.0.2
+**Release Date**: 2025-12-26 01:27:46
 
 ## What's Included
 
