@@ -1,16 +1,18 @@
 {{- /*
-Language Switcher Component
-语言切换组件 - 下拉菜单样式
+Language Switcher Component - Using Reusable Dropdown
+语言切换组件 - 使用通用下拉菜单组件
 
 功能：
 - 显示当前语言的简短标识
-- 点击/悬浮显示下拉菜单
+- 桌面端悬浮显示，移动端点击展开
 - 列出所有可用语言
 - 如果有翻译，链接到翻译页面
 - 如果没有翻译，跳转到目标语言首页
 
-参考: hugo-theme-paper: layouts/partials/language-switcher.html
-Requirements: 29.1, 29.2, 29.3, 29.4
+改进：
+- 使用通用 dropdown 组件
+- 统一交互体验
+- 改善移动端体验
 */ -}}
 
 {{- if hugo.IsMultilingual -}}
@@ -39,83 +41,84 @@ Requirements: 29.1, 29.2, 29.3, 29.4
     {{- $currentDisplay = upper $currentLang -}}
   {{- end -}}
 
-  <div class="language-dropdown">
-    {{- /* 当前语言按钮 */ -}}
-    <a class="nav-link language-current" href="javascript:;" 
-       aria-label="{{ i18n "language.switchTo" | default "Switch language" }}"
-       title="{{ i18n "language.switchTo" | default "Switch language" }}">
-      <span class="language-code">{{ $currentDisplay }}</span>
-      <i class="iconfont icon-arrowdown language-arrow"></i>
-    </a>
+  {{- /* 构建下拉菜单项 */ -}}
+  {{- $items := slice -}}
+  {{- range .Site.Languages -}}
+    {{- $targetLang := .Lang -}}
+    {{- $langName := .LanguageName -}}
     
-    {{- /* 下拉菜单 */ -}}
-    <div class="language-menu">
-      {{- /* 遍历所有语言 */ -}}
-      {{- range .Site.Languages -}}
-        {{- $targetLang := .Lang -}}
-        {{- $langName := .LanguageName -}}
-        
-        {{- /* 获取语言简短标识 */ -}}
-        {{- $langDisplay := "" -}}
-        {{- if or (eq $targetLang "zh-CN") (eq $targetLang "zh-cn") (eq $targetLang "zh") -}}
-          {{- $langDisplay = "简" -}}
-        {{- else if or (eq $targetLang "zh-TW") (eq $targetLang "zh-tw") (eq $targetLang "tw") -}}
-          {{- $langDisplay = "繁" -}}
-        {{- else if or (eq $targetLang "zh-HK") (eq $targetLang "zh-hk") -}}
-          {{- $langDisplay = "港" -}}
-        {{- else if or (eq $targetLang "ja") (hasPrefix $targetLang "ja") -}}
-          {{- $langDisplay = "日" -}}
-        {{- else if or (eq $targetLang "en") (hasPrefix $targetLang "en") -}}
-          {{- $langDisplay = "EN" -}}
-        {{- else if or (eq $targetLang "de") (hasPrefix $targetLang "de") -}}
-          {{- $langDisplay = "DE" -}}
-        {{- else if or (eq $targetLang "es") (hasPrefix $targetLang "es") -}}
-          {{- $langDisplay = "ES" -}}
-        {{- else if or (eq $targetLang "ru") (hasPrefix $targetLang "ru") -}}
-          {{- $langDisplay = "RU" -}}
-        {{- else if or (eq $targetLang "eo") (hasPrefix $targetLang "eo") -}}
-          {{- $langDisplay = "EO" -}}
-        {{- else -}}
-          {{- $langDisplay = upper $targetLang -}}
-        {{- end -}}
-        
-        {{- /* 确定链接目标 */ -}}
-        {{- $targetURL := "" -}}
-        {{- $isCurrentLang := eq $targetLang $.Language.Lang -}}
-        
-        {{- if $isCurrentLang -}}
-          {{- /* 当前语言，不需要链接 */ -}}
-        {{- else -}}
-          {{- /* 检查是否有翻译版本 */ -}}
-          {{- $hasTranslation := false -}}
-          {{- range $.Translations -}}
-            {{- if eq .Language.Lang $targetLang -}}
-              {{- $targetURL = .RelPermalink -}}
-              {{- $hasTranslation = true -}}
-            {{- end -}}
-          {{- end -}}
-          
-          {{- /* 如果没有翻译，跳转到目标语言首页 */ -}}
-          {{- if not $hasTranslation -}}
-            {{- $targetURL = printf "/%s/" $targetLang -}}
-          {{- end -}}
-        {{- end -}}
-        
-        {{- if $isCurrentLang -}}
-          {{- /* 当前语言项 - 高亮显示 */ -}}
-          <span class="language-item language-item-current">
-            <span class="language-code">{{ $langDisplay }}</span>
-            <span class="language-name">{{ $langName }}</span>
-          </span>
-        {{- else -}}
-          {{- /* 其他语言项 */ -}}
-          <a class="language-item" href="{{ $targetURL }}"
-             title="{{ i18n "language.switchTo" | default "Switch to" }} {{ $langName }}">
-            <span class="language-code">{{ $langDisplay }}</span>
-            <span class="language-name">{{ $langName }}</span>
-          </a>
+    {{- /* 获取语言简短标识 */ -}}
+    {{- $langDisplay := "" -}}
+    {{- if or (eq $targetLang "zh-CN") (eq $targetLang "zh-cn") (eq $targetLang "zh") -}}
+      {{- $langDisplay = "简" -}}
+    {{- else if or (eq $targetLang "zh-TW") (eq $targetLang "zh-tw") (eq $targetLang "tw") -}}
+      {{- $langDisplay = "繁" -}}
+    {{- else if or (eq $targetLang "zh-HK") (eq $targetLang "zh-hk") -}}
+      {{- $langDisplay = "港" -}}
+    {{- else if or (eq $targetLang "ja") (hasPrefix $targetLang "ja") -}}
+      {{- $langDisplay = "日" -}}
+    {{- else if or (eq $targetLang "en") (hasPrefix $targetLang "en") -}}
+      {{- $langDisplay = "EN" -}}
+    {{- else if or (eq $targetLang "de") (hasPrefix $targetLang "de") -}}
+      {{- $langDisplay = "DE" -}}
+    {{- else if or (eq $targetLang "es") (hasPrefix $targetLang "es") -}}
+      {{- $langDisplay = "ES" -}}
+    {{- else if or (eq $targetLang "ru") (hasPrefix $targetLang "ru") -}}
+      {{- $langDisplay = "RU" -}}
+    {{- else if or (eq $targetLang "eo") (hasPrefix $targetLang "eo") -}}
+      {{- $langDisplay = "EO" -}}
+    {{- else -}}
+      {{- $langDisplay = upper $targetLang -}}
+    {{- end -}}
+    
+    {{- /* 确定链接目标 */ -}}
+    {{- $targetURL := "" -}}
+    {{- $isCurrentLang := eq $targetLang $.Language.Lang -}}
+    
+    {{- if not $isCurrentLang -}}
+      {{- /* 检查是否有翻译版本 */ -}}
+      {{- $hasTranslation := false -}}
+      {{- range $.Translations -}}
+        {{- if eq .Language.Lang $targetLang -}}
+          {{- $targetURL = .RelPermalink -}}
+          {{- $hasTranslation = true -}}
         {{- end -}}
       {{- end -}}
-    </div>
-  </div>
+      
+      {{- /* 如果没有翻译，跳转到目标语言首页 */ -}}
+      {{- if not $hasTranslation -}}
+        {{- $targetURL = printf "/%s/" $targetLang -}}
+      {{- end -}}
+    {{- end -}}
+    
+    {{- /* 构建菜单项 HTML */ -}}
+    {{- $itemHTML := printf `<span class="language-code">%s</span><span class="language-name">%s</span>` $langDisplay $langName -}}
+    
+    {{- /* 添加到菜单项列表 */ -}}
+    {{- if $isCurrentLang -}}
+      {{- $items = $items | append (dict 
+        "html" $itemHTML
+        "active" true
+        "class" "language-current"
+      ) -}}
+    {{- else -}}
+      {{- $items = $items | append (dict 
+        "html" $itemHTML
+        "url" $targetURL
+        "title" (printf "%s %s" (i18n "language.switchTo" | default "Switch to") $langName)
+      ) -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{- /* 构建触发按钮内容 */ -}}
+  {{- $triggerHTML := printf `<span class="language-code">%s</span>` $currentDisplay -}}
+
+  {{- /* 使用通用下拉菜单组件 */ -}}
+  {{ partial "components/dropdown.html" (dict 
+    "trigger" $triggerHTML
+    "items" $items
+    "class" "language-switcher"
+    "menuClass" "dropdown-menu-right"
+    "id" "languageDropdown"
+  ) }}
 {{- end -}}

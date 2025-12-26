@@ -1,0 +1,71 @@
+{{- /*
+Reusable Dropdown Component
+通用下拉菜单组件
+
+参数：
+- .trigger: 触发按钮的内容 (HTML)
+- .items: 下拉菜单项列表
+- .class: 额外的 CSS 类名
+- .menuClass: 下拉菜单的额外 CSS 类名
+- .id: 下拉菜单的 ID（可选）
+
+使用示例：
+{{ partial "components/dropdown.html" (dict 
+  "trigger" "触发按钮内容"
+  "items" $items
+  "class" "custom-dropdown"
+  "menuClass" "dropdown-menu-right"
+) }}
+
+菜单项格式：
+- .text: 显示文本
+- .url: 链接地址（可选，如果没有则为纯文本）
+- .class: 额外的 CSS 类名（可选）
+- .active: 是否为当前项（可选）
+- .html: 自定义 HTML 内容（可选，优先于 text）
+*/ -}}
+
+{{- $trigger := .trigger -}}
+{{- $items := .items -}}
+{{- $class := .class | default "" -}}
+{{- $menuClass := .menuClass | default "" -}}
+{{- $id := .id | default "" -}}
+
+<div class="dropdown {{ $class }}">
+  {{- /* 下拉触发按钮 */ -}}
+  <a class="nav-link dropdown-toggle" href="javascript:;" 
+     role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+     {{ with $id }}id="{{ . }}"{{ end }}>
+    {{ $trigger | safeHTML }}
+    <i class="iconfont icon-arrow-down dropdown-arrow"></i>
+  </a>
+  
+  {{- /* 下拉菜单 */ -}}
+  <div class="dropdown-menu {{ $menuClass }}" {{ with $id }}aria-labelledby="{{ . }}"{{ end }}>
+    {{- range $items -}}
+      {{- $itemClass := .class | default "" -}}
+      {{- $isActive := .active | default false -}}
+      
+      {{- if .url -}}
+        {{- /* 可点击的菜单项 */ -}}
+        <a class="dropdown-item {{ $itemClass }}" href="{{ .url }}"
+           {{ with .title }}title="{{ . }}"{{ end }}>
+          {{ if .html }}
+            {{ .html | safeHTML }}
+          {{ else }}
+            {{ .text }}
+          {{ end }}
+        </a>
+      {{- else -}}
+        {{- /* 纯文本菜单项（通常用于当前选中项） */ -}}
+        <span class="dropdown-item-text {{ $itemClass }} {{ if $isActive }}active{{ end }}">
+          {{ if .html }}
+            {{ .html | safeHTML }}
+          {{ else }}
+            {{ .text }}
+          {{ end }}
+        </span>
+      {{- end -}}
+    {{- end -}}
+  </div>
+</div>
