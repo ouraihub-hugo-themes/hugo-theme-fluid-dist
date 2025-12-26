@@ -1,0 +1,70 @@
+{{- define "main" -}}
+{{/* 文档页面 - 使用与文章页面一致的布局风格 */}}
+
+{{/* Math 数学公式支持 */}}
+{{ partial "plugins/math.html" . }}
+
+{{/* Mermaid 流程图支持 */}}
+{{ partial "plugins/mermaid.html" . }}
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    {{/* 左侧边栏 */}}
+    <div class="side-col d-none d-lg-block col-lg-2">
+      {{/* 左侧可以放广告或其他内容 */}}
+    </div>
+
+    {{/* 中间内容区 */}}
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            {{/* 文档标题（SEO 用） */}}
+            <h1 id="seo-header">{{ .Title }}</h1>
+
+            {{/* 文档描述 */}}
+            {{ if .Description }}
+              <blockquote class="post-description">{{ .Description }}</blockquote>
+            {{ end }}
+
+            {{/* 文档内容 - Pagefind 索引区域 */}}
+            <div class="markdown-body" data-pagefind-body>
+              {{ .Content }}
+            </div>
+
+            <hr />
+
+            {{/* 文档导航链接 */}}
+            {{ $section := .Section }}
+            {{ $pages := where .Site.Pages "Section" $section }}
+            {{ if gt (len $pages) 1 }}
+            <div class="mt-8">
+              <h3 class="text-lg font-semibold mb-4">{{ i18n "docs.other_pages" | default "其他文档" }}</h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {{ range $pages }}
+                  {{ if ne .RelPermalink $.RelPermalink }}
+                  <a href="{{ .RelPermalink }}" class="block p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                    <h4 class="font-medium text-blue-600 hover:text-blue-800">{{ .Title }}</h4>
+                    {{ if .Params.description }}
+                    <p class="text-sm text-gray-600 mt-1">{{ .Params.description }}</p>
+                    {{ end }}
+                  </a>
+                  {{ end }}
+                {{ end }}
+              </div>
+            </div>
+            {{ end }}
+          </article>
+        </div>
+      </div>
+    </div>
+
+    {{/* 右侧边栏 - 目录 */}}
+    <div class="side-col d-none d-lg-block col-lg-2">
+      {{ if and (.Site.Params.post.toc.enable | default true) (ne .Params.toc false) }}
+        {{ partial "post/toc.html" . }}
+      {{ end }}
+    </div>
+  </div>
+</div>
+{{- end -}}
